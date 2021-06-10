@@ -6,49 +6,41 @@ class Post {
     this.title = title;
     this.body = body;
     this.userId = userId;
-    this.id = uuidv4();
+    this.postId = uuidv4();
+    this.createdAt = new Date(Date.now());
   }
 
-  async save() {
-    let d = new Date();
-    let yyyy = d.getFullYear();
-    let mm = d.getMonth() + 1; // months is 0 indexed
-    let dd = d.getDate();
-
-    let currentDate = `${yyyy}-${mm}-${dd}`;
-
-    let sql = `
-    INSERT INTO posts(
-      id,
+  save() {
+    let sql = `INSERT INTO posts(
+      post_id,
       title,
-      user_id,
       body,
-      publish_date
+      created_at,
+      user_id
     )
-    VALUES(
-      '${this.id}',
-      '${this.title}',
-      '${this.userId}',
-      '${this.body}',
-      '${currentDate}'
-    );
-    `;
+    VALUES(?, ?, ?, ?, ?);`;
 
-    const savedPost = await db.execute(sql);
+    const savedPost = db.execute(sql, [
+      this.postId,
+      this.title,
+      this.body,
+      this.createdAt,
+      this.userId,
+    ]);
 
     return savedPost;
   }
 
   static findAll() {
-    let sql = `"SELECT * FROM posts;"`;
+    let sql = `SELECT * FROM posts;`;
 
     return db.execute(sql);
   }
 
   static findById(id) {
-    let sql = `SELECT * FROM posts WHERE id = '${id}'`;
+    let sql = `SELECT * FROM posts WHERE id = ?`;
 
-    return db.execute(sql);
+    return db.execute(sql, [id]);
   }
 
   static findByIdAndUpdate(id, updatedData) {}

@@ -10,7 +10,7 @@
       "askForPassword": true,
       "driver": "MySQL",
       "name": "localhost",
-      "database": "node-blog",
+      "database": "internet_forum",
       "username": "root"
     }
   ],

@@ -31,14 +31,14 @@ exports.getPostById = async (req, res, next) => {
 
 exports.createPost = async (req, res, next) => {
   let { title, body } = req.body;
-  let userId = "";
+  let userId = req.session.userId;
 
   try {
-    const post = new Post(title, body, userId);
+    let post = new Post(title, body, userId);
 
-    await post.save();
+    post = await post.save();
 
-    res.status(201).send(post);
+    res.status(201).send({ post });
   } catch (error) {
     console.trace(error);
     next(error);

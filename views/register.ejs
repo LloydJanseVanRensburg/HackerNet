@@ -1,0 +1,62 @@
+<%- include('./partials/header.ejs') %>
+
+<form class="register_form" action="/auth/register" method="POST">
+  <h1>Register Page</h1>
+
+  <div class="form_group">
+    <label for="firstName">First Name</label>
+    <input
+      type="text"
+      required
+      placeholder="Enter first name"
+      name="firstName"
+      id="firstName"
+    />
+  </div>
+
+  <div class="form_group">
+    <label for="lastName">Last Name</label>
+    <input
+      type="text"
+      required
+      placeholder="Enter last name"
+      name="lastName"
+      id="lastName"
+    />
+  </div>
+
+  <div class="form_group">
+    <label for="email">Email</label>
+    <input
+      type="email"
+      required
+      placeholder="Enter email address"
+      name="email"
+      id="email"
+    />
+  </div>
+
+  <div class="form_group">
+    <label for="confirmPassword">Password</label>
+    <input
+      type="password"
+      required
+      placeholder="Enter password"
+      name="password"
+      id="password"
+    />
+  </div>
+
+  <div class="form_group">
+    <label for="confirmPassword">Confirm Password</label>
+    <input
+      type="password"
+      required
+      placeholder="Confirm password"
+      name="confirmPassword"
+      id="confirmPassword"
+    />
+  </div>
+</form>
+
+<%- include('./partials/footer.ejs') %>
