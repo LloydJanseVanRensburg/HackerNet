@@ -1,0 +1,30 @@
+<%- include('./partials/header.ejs') %>
+
+<%- include('./partials/navbar.ejs', { isAuth, link: "" }) %>
+
+<div class="container">
+  <h1 class="single_thread_header page__title">Create New Thread</h1>
+
+  <form action="">
+
+    <div class="form_group">
+      <label for="title">Title</label>
+      <input type="text" name="title" id="title" placeholder="Thread title">
+    </div>
+
+    <div class="form_group">
+      <label for="body">Body</label>
+      <textarea name="body" id="body" rows="10" placeholder="Thread Body"></textarea>
+    </div>
+
+    <div class="form_group">
+      <label for="image">Image</label>
+      <input name="image" id="image" type="file" >
+    </div>
+
+    <button class="btn btn-primary">Create</button>
+  </form>
+</div>
+
+<%- include('./partials/footer.ejs') %>
+

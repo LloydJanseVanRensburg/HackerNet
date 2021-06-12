@@ -1,0 +1,93 @@
+<%- include('./partials/header.ejs') %>
+
+<%- include('./partials/navbar.ejs', { isAuth, link: "Forums" }) %>
+
+<div class="container">
+
+  <div class="forums__header">
+    <h1 class="page__title">Forums Page</h1>
+
+    <% if(isAdmin)  { %>
+      <a href="/forums/new" class="btn btn-secondary">Create Forum</a>
+    <% } %>
+  </div>
+
+  <h4 class="forum__subtext">Forums you are following (<%= following %>)</h4>
+
+  <div class="flex__container">
+    <a href="/forums/1" class="forum__card">
+      <div class="forum__card-img">
+        <img src="/public/images/c3_logo.png" alt="">
+      </div>
+      <h4>CSharp</h4>
+    </a>
+    <a href="/forums/1" class="forum__card">
+      <div class="forum__card-img">
+        <img src="/public/images/c3_logo.png" alt="">
+      </div>
+      <h4>CSharp</h4>
+    </a>
+    <a href="/forums/1" class="forum__card">
+      <div class="forum__card-img">
+        <img src="/public/images/c3_logo.png" alt="">
+      </div>
+      <h4>CSharp</h4>
+    </a>
+  </div>
+
+  <h4 class="forum__subtext">Forums you are not following (<%= totalAmount %>)</h4>
+
+  <div class="flex__container">
+    <a href="/forums/1" class="forum__card">
+      <div class="forum__card-img">
+        <img src="/public/images/c3_logo.png" alt="">
+      </div>
+      <h4>CSharp</h4>
+    </a>
+    <a href="/forums/1" class="forum__card">
+      <div class="forum__card-img">
+        <img src="/public/images/c3_logo.png" alt="">
+      </div>
+      <h4>CSharp</h4>
+    </a>
+    <a href="/forums/1" class="forum__card">
+      <div class="forum__card-img">
+        <img src="/public/images/c3_logo.png" alt="">
+      </div>
+      <h4>CSharp</h4>
+    </a>
+    <a href="/forums/1" class="forum__card">
+      <div class="forum__card-img">
+        <img src="/public/images/c3_logo.png" alt="">
+      </div>
+      <h4>CSharp</h4>
+    </a>
+    <a href="/forums/1" class="forum__card">
+      <div class="forum__card-img">
+        <img src="/public/images/c3_logo.png" alt="">
+      </div>
+      <h4>CSharp</h4>
+    </a>
+    <a href="/forums/1" class="forum__card">
+      <div class="forum__card-img">
+        <img src="/public/images/c3_logo.png" alt="">
+      </div>
+      <h4>CSharp</h4>
+    </a>
+    <a href="/forums/1" class="forum__card">
+      <div class="forum__card-img">
+        <img src="/public/images/c3_logo.png" alt="">
+      </div>
+      <h4>CSharp</h4>
+    </a>
+    <a href="/forums/1" class="forum__card">
+      <div class="forum__card-img">
+        <img src="/public/images/c3_logo.png" alt="">
+      </div>
+      <h4>CSharp</h4>
+    </a>
+  </div>
+
+</div>
+
+<%- include('./partials/footer.ejs') %>

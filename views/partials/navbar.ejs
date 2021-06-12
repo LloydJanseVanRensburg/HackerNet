@@ -2,23 +2,57 @@
   <h2 class="navbar__logo">ShadowNet</h2>
 
   <ul class="navbar__list">
+
+  <% if(!isAuth)  { %>
     <li class="navbar__listItem">
-      <a href="/users/myfeed">Feed</a>
+      <a 
+        href="/auth/login" 
+        class="<%= link === "Login" ? "active": null %>"
+      >
+        Login
+      </a>
     </li>
     <li class="navbar__listItem">
-      <a href="#">Forums</a>
+      <a 
+        href="/auth/register" 
+        class="<%= link === "Register" ? "active": null %>"
+      >
+        Register
+      </a>
+    </li>
+  <% } else { %>
+    <li class="navbar__listItem">
+      <a 
+        href="/" 
+        class="<%= link === "Feed" ? "active": null %>"
+      >
+        Feed
+      </a>
     </li>
     <li class="navbar__listItem">
-      <a href="/users/myprofile">Profile</a>
+      <a 
+        href="/forums/" 
+        class="<%= link === "Forums" ? "active": null %>"
+      >
+        Forums
+      </a>
     </li>
     <li class="navbar__listItem">
-      <a href="#">Logout</a>
+      <a 
+        href="/users/myprofile"
+        class="<%= link === "Profile" ? "active": null %>"
+      > 
+        Profile
+      </a>
     </li>
     <li class="navbar__listItem">
-      <a href="/auth/login">Login</a>
+      <a 
+        href="/auth/logout"
+      >
+        Logout
+      </a>
     </li>
-    <li class="navbar__listItem">
-      <a href="/auth/register">Register</a>
-    </li>
+  <% } %>
+
   </ul>
 </nav>

@@ -1,0 +1,36 @@
+<%- include('./partials/header.ejs') %>
+
+<%- include('./partials/navbar.ejs', { isAuth, link: "" }) %>
+
+<div class="container">
+  <div class="single_thread_header">
+    <h1 class="page__title">Thread Page</h1>
+
+    <% if(ownsThread) { %>
+      <div class="single_thread_controls">
+        <a href="/threads/1/edit" class="btn btn-secondary">Edit</a>
+
+        <form action="">
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+      </div>
+    <% } %>
+  </div>
+
+  <div class="single_thread_img">
+    <img src="/public/uploads/csharp_code_snippet.PNG" alt="thread image upload">
+  </div>
+
+  <h4 class="single_thread_title">Thread Title</h4>
+
+  <p class="single_thread_text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Error aperiam unde mollitia veniam commodi at totam nam illum adipisci neque. A quae distinctio repellendus tempora. Obcaecati, nam beatae incidunt pariatur aut doloremque a numquam sit voluptatem quidem veritatis repellat libero molestiae, architecto est dolorum, natus eos dolore? Consequuntur animi, recusandae repellat veritatis fuga error ullam similique ad autem commodi? Tempora earum expedita autem consequatur perspiciatis, eligendi tenetur eos laudantium assumenda at? Aliquam dolores nostrum laboriosam provident sit, corporis adipisci ipsa nisi. Delectus assumenda obcaecati vel omnis quos fugiat error pariatur autem deleniti possimus vero, dolores, totam tempore ducimus voluptatibus eligendi!</p>
+
+  <div>
+    <h4 class="single_thread_title">Comments (2)</h4>
+  </div>
+
+
+</div>
+
+<%- include('./partials/footer.ejs') %>
+

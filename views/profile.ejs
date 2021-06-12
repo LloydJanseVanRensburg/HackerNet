@@ -1,5 +1,32 @@
 <%- include('./partials/header.ejs') %>
 
-<h1>My Profile Page</h1>
+<%- include('./partials/navbar.ejs', { isAuth, link: "Profile" }) %>
+
+<div class="container">
+  <h1 class="profile__header page__title">Profile Page</h1>
+
+  <div class="profile__img">
+    <img src="/public/uploads/avatar_image.png" alt="avatar image">
+  </div>
+
+  <div class="profile__info">
+    <div>
+      <span>First Name:</span>
+      <span>Lloyd</span>
+    </div>
+    <div>
+      <span>Last Name:</span>
+      <span>Janse van Rensburg</span>
+    </div>
+    <div>
+      <span>Email Address:</span>
+      <span>lloydjvrensburg@gmail.com</span>
+    </div>
+  </div>
+
+  <h4 class="profile__subtext">Your Threads (<%= totalAmount %>)</h4>
+
+  <%- include('./partials/thread.ejs') %>
+</div>
 
 <%- include('./partials/footer.ejs') %>

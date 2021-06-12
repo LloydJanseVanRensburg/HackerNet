@@ -1,6 +1,8 @@
 <%- include('./partials/header.ejs') %>
 
-<form class="login_form" action="/auth/login" method="POST">
+<%- include('./partials/navbar.ejs', { isAuth, link: "Login" }) %>
+
+<form class="auth_form" action="/auth/login" method="POST">
   <h1>Login Page</h1>
 
   <div class="form_group">
@@ -24,6 +26,10 @@
       id="password"
     />
   </div>
+
+  <button class="btn btn-primary btn-block">Login</button>
+
+  <a href="/auth/register">Don't have account yet? Click Here</a>
 </form>
 
 <%- include('./partials/footer.ejs') %>

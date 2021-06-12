@@ -13,6 +13,5 @@
       "database": "internet_forum",
       "username": "root"
     }
-  ],
-  "terminal.integrated.automationShell.windows": "C:\\Program Files\\Git\\bin"
+  ]
 }
