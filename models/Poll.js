@@ -1,10 +1,10 @@
 const db = require("../config/db");
 const { v4: uuidv4 } = require("uuid");
 
-class Comment {
+class Poll {
   constructor() {}
 
   save() {}
 }
 
-module.exports = Comment;
+module.exports = Poll;

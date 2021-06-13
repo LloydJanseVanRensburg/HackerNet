@@ -12,80 +12,30 @@
     <% } %>
   </div>
 
-  <h4 class="forum__subtext">Forums you are following (<%= following %>)</h4>
+  <h4 class="forum__subtext">Forums you are following (<%= forumYouFollow.length %>)</h4>
 
   <div class="flex__container">
-    <a href="/forums/1" class="forum__card">
-      <div class="forum__card-img">
-        <img src="/public/images/c3_logo.png" alt="">
-      </div>
-      <h4>CSharp</h4>
-    </a>
-    <a href="/forums/1" class="forum__card">
-      <div class="forum__card-img">
-        <img src="/public/images/c3_logo.png" alt="">
-      </div>
-      <h4>CSharp</h4>
-    </a>
-    <a href="/forums/1" class="forum__card">
-      <div class="forum__card-img">
-        <img src="/public/images/c3_logo.png" alt="">
-      </div>
-      <h4>CSharp</h4>
-    </a>
+    <% forumYouFollow.forEach((f) => { %>
+      <a href="/forums/<%= f.forum_id %>" class="forum__card">
+        <div class="forum__card-img">
+          <img src="/<%= f.image_url %>" alt="">
+        </div>
+        <h4><%= f.title %></h4>
+      </a>
+    <% }) %>
   </div>
 
-  <h4 class="forum__subtext">Forums you are not following (<%= totalAmount %>)</h4>
+  <h4 class="forum__subtext">All Forums (<%= allForums.length %>)</h4>
 
   <div class="flex__container">
-    <a href="/forums/1" class="forum__card">
-      <div class="forum__card-img">
-        <img src="/public/images/c3_logo.png" alt="">
-      </div>
-      <h4>CSharp</h4>
-    </a>
-    <a href="/forums/1" class="forum__card">
-      <div class="forum__card-img">
-        <img src="/public/images/c3_logo.png" alt="">
-      </div>
-      <h4>CSharp</h4>
-    </a>
-    <a href="/forums/1" class="forum__card">
-      <div class="forum__card-img">
-        <img src="/public/images/c3_logo.png" alt="">
-      </div>
-      <h4>CSharp</h4>
-    </a>
-    <a href="/forums/1" class="forum__card">
-      <div class="forum__card-img">
-        <img src="/public/images/c3_logo.png" alt="">
-      </div>
-      <h4>CSharp</h4>
-    </a>
-    <a href="/forums/1" class="forum__card">
-      <div class="forum__card-img">
-        <img src="/public/images/c3_logo.png" alt="">
-      </div>
-      <h4>CSharp</h4>
-    </a>
-    <a href="/forums/1" class="forum__card">
-      <div class="forum__card-img">
-        <img src="/public/images/c3_logo.png" alt="">
-      </div>
-      <h4>CSharp</h4>
-    </a>
-    <a href="/forums/1" class="forum__card">
-      <div class="forum__card-img">
-        <img src="/public/images/c3_logo.png" alt="">
-      </div>
-      <h4>CSharp</h4>
-    </a>
-    <a href="/forums/1" class="forum__card">
-      <div class="forum__card-img">
-        <img src="/public/images/c3_logo.png" alt="">
-      </div>
-      <h4>CSharp</h4>
-    </a>
+    <% allForums.forEach((f) => { %>
+      <a href="/forums/<%= f.forum_id %>" class="forum__card">
+        <div class="forum__card-img">
+          <img src="/<%= f.image_url %>" alt="">
+        </div>
+        <h4><%= f.title %></h4>
+      </a>
+    <% }) %>
   </div>
 
 </div>

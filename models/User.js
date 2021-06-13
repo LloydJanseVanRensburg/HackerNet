@@ -13,41 +13,22 @@ class User {
   }
 
   save() {
-    let sql = `INSERT INTO users(user_id, first_name, last_name, email, created_at, password) VALUES (?,?,?,?,?,?);`;
-
-    const newUser = db.execute(sql, [
+    let sql = `INSERT INTO users(user_id, first_name, last_name, email, created_at, password, role) VALUES (?,?,?,?,?,?,?);`;
+    let placeholders = [
       this.userId,
       this.firstName,
       this.lastName,
       this.email,
       this.createdAt,
       this.password,
-    ]);
+      "User",
+    ];
 
-    return newUser;
-  }
-
-  static findAll() {
-    return db.execute("SELECT * FROM users;");
+    return db.execute(sql, placeholders);
   }
 
   static findById(id) {
-    let sql = `SELECT * FROM users WHERE id = ?`;
-
-    return db.execute(sql, [id]);
-  }
-
-  static findByIdAndUpdate(id, newData) {
-    // Run select query for a specific user
-    // Close conneciton
-    // Return found user
-  }
-
-  static findByIdAndDelete(id) {
-    // Connect to database
-    // Run select query for a specific user
-    // Close conneciton
-    // Return found user
+    return db.execute("SELECT * FROM users WHERE user_id = ?", [id]);
   }
 
   static checkPasswordMatch(dbPassword, userPassword) {

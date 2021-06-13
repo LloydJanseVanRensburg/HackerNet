@@ -1,25 +1,45 @@
-exports.getForumsPage = (req, res, next) => {
-  let pageData = {
-    pageTitle: "Forums Page",
-    isAuth: true,
-    isAdmin: true,
-    following: 3,
-    totalAmount: 8,
-  };
+const Forum = require("../models/Forum");
 
-  res.render("forums", pageData);
+exports.getForumsPage = async (req, res, next) => {
+  try {
+    const forumYouFollow = await Forum.findMyJoinedForums(req.session.userId);
+    const [allForums, _] = await Forum.findAllForums();
+
+    let pageData = {
+      pageTitle: "Forums Page",
+      isAuth: true,
+      isAdmin: req.user.role === "Admin",
+      forumYouFollow,
+      allForums,
+    };
+
+    res.render("forums", pageData);
+  } catch (error) {
+    next(error);
+  }
 };
 
-exports.getForumPage = (req, res, next) => {
-  let pageData = {
-    pageTitle: "Forum Page",
-    isAuth: true,
-    isAdmin: true,
-    followers: 300,
-    threadCount: 17,
-  };
+exports.getForumPage = async (req, res, next) => {
+  try {
+    const forum_id = req.params.id;
 
-  res.render("forum", pageData);
+    const [forumData, _a] = await Forum.findById(forum_id);
+    const [threadCount, _b] = await Forum.findAllThreads(forum_id);
+    const [followerCount, _c] = await Forum.followerCount(forum_id);
+
+    let pageData = {
+      pageTitle: "Forum Page",
+      isAuth: true,
+      isAdmin: req.user.role === "Admin",
+      forumData: forumData[0],
+      followerCount: followerCount[0].count,
+      threads: threadCount,
+    };
+
+    res.render("forum", pageData);
+  } catch (error) {
+    next(error);
+  }
 };
 
 exports.getCreateForumPage = (req, res, next) => {
@@ -29,6 +49,22 @@ exports.getCreateForumPage = (req, res, next) => {
   };
 
   res.render("create-forum", pageData);
+};
+
+exports.createNewForum = async (req, res, next) => {
+  const { title, description } = req.body;
+
+  const image_url = req.file.path;
+
+  try {
+    const newForum = new Forum(title, description, image_url);
+
+    await newForum.save();
+
+    res.redirect(`/forums/${newForum.forum_id}`);
+  } catch (error) {
+    next(error);
+  }
 };
 
 exports.getEditForumPage = (req, res, next) => {

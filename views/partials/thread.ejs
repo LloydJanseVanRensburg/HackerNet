@@ -1,36 +1,35 @@
 <div class="thread__container">
+  <div class="thread__header">
 
-    <div class="thread__header">
-
-      <div class="thread__info">
-        <div class="avatar">
-          <img src="/public/images/c3_logo.png" alt="forum-logo">
-        </div>
-  
-        <h4>Forum Name</h4>
+    <div class="thread__info">
+      <div class="avatar">
+        <img src="/<%= data.forum_image %>" alt="forum-logo">
       </div>
 
-      <p class="thread__creator">Creator of Thread</p>
-
+      <h4><%= data.forum_title %></h4>
     </div>
 
-    <div class="thread__image">
-      <img src="/public/uploads/csharp_code_snippet.PNG" alt="code snippet">
-    </div>
+    <p class="thread__creator"><%= data.first_name %> <%=  data.last_name  %></p>
 
-    <h4 class="thread__title">Thread Title</h4>
-
-    <p class="thread__text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam cumque rem nisi dolorem nobis aperiam consequuntur distinctio sint soluta sit eveniet saepe ratione cum, eius neque. Tempora est consectetur possimus quod, ex quaerat iste vero harum rerum enim omnis perspiciatis ipsam corporis libero explicabo obcaecati voluptates nemo maxime? Doloribus minus vero quos culpa pariatur placeat sit aliquid est? Totam laborum consectetur voluptatum dolorum pariatur numquam, alias animi dolor debitis culpa ut recusandae at dignissimos officiis suscipit ducimus quos ipsum. Fuga mollitia iusto libero odit consectetur? Blanditiis, ipsa quidem. Nesciunt nemo omnis asperiores provident deserunt ipsa, enim tenetur rem at dolorem.</p>
-
-    <ul class="thread__controls">
-      <li>
-        <a href="/threads/1">View</a>
-      </li>
-      <li>
-        <button>Comment</button>
-      </li>
-      <li>
-        <button>Like</button>
-      </li>
-    </ul>
   </div>
+
+  <div class="thread__image">
+    <img src="/<%= data.thread_image %>" alt="code snippet">
+  </div>
+
+  <h4 class="thread__title"><%= data.thread_title %></h4>
+
+  <p class="thread__text"><%= data.body %></p>
+
+  <ul class="thread__controls">
+    <li>
+      <a href="/threads/<%= data.thread_id %>">View</a>
+    </li>
+    <li>
+      <button>Comment</button>
+    </li>
+    <li>
+      <button>Like</button>
+    </li>
+  </ul>
+</div>

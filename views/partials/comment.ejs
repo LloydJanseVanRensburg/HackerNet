@@ -1,0 +1,15 @@
+<div class="comment_container">
+  <div class="comment_header">
+    <span>Comment Title</span>
+
+    <% if(ownsComment) { %>
+      <form action="">
+        <button class="btn btn-danger">Delete</button>
+      </form>
+    <% } else { %> 
+      <span>Comment Creator</span>
+    <% } %>
+  </div>
+
+  <p class="comment_text">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestiae enim debitis beatae cum commodi error sed? Maiores consequatur velit laudantium ipsum perferendis est nesciunt necessitatibus!</p>
+</div>

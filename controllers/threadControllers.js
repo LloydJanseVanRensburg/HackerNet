@@ -1,3 +1,6 @@
+const Forum = require("../models/Forum");
+const Thread = require("../models/Thread");
+
 exports.getThreadPage = (req, res, next) => {
   let pageData = {
     pageTitle: "Thread Page",
@@ -8,13 +11,36 @@ exports.getThreadPage = (req, res, next) => {
   res.render("view-thread", pageData);
 };
 
-exports.getCreateThreadPage = (req, res, next) => {
-  let pageData = {
-    pageTitle: "Create Thread",
-    isAuth: true,
-  };
+exports.getCreateThreadPage = async (req, res, next) => {
+  try {
+    const forumsYouFollow = await Forum.findMyJoinedForums(req.user.user_id);
 
-  res.render("create-thread", pageData);
+    let pageData = {
+      pageTitle: "Create Thread Page",
+      isAuth: true,
+      forumsYouFollow,
+    };
+
+    res.render("create-thread", pageData);
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.createNewThread = async (req, res, next) => {
+  try {
+    let { forum, title, body } = req.body;
+    let image_url = req.file.path;
+    let user_id = req.user.user_id;
+
+    const newThread = new Thread(user_id, forum, title, body, image_url);
+
+    await newThread.save();
+
+    res.redirect(`/threads/${newThread.thread_id}`);
+  } catch (error) {
+    next(error);
+  }
 };
 
 exports.getEditThreadPage = (req, res, next) => {

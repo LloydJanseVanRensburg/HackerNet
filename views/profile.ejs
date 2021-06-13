@@ -12,21 +12,25 @@
   <div class="profile__info">
     <div>
       <span>First Name:</span>
-      <span>Lloyd</span>
+      <span><%= firstName %></span>
     </div>
     <div>
       <span>Last Name:</span>
-      <span>Janse van Rensburg</span>
+      <span><%= lastName %></span>
     </div>
     <div>
       <span>Email Address:</span>
-      <span>lloydjvrensburg@gmail.com</span>
+      <span><%= email %>></span>
     </div>
   </div>
 
-  <h4 class="profile__subtext">Your Threads (<%= totalAmount %>)</h4>
+  <h4 class="profile__subtext">Your Threads (<%= threads.length %>)</h4>
 
-  <%- include('./partials/thread.ejs') %>
+  <% if(threads.length > 0) { %>
+    <% threads.forEach((thread) => { %>
+      <%- include('./partials/thread.ejs', { thread }) %>
+    <% }) %>
+  <% } %>
 </div>
 
 <%- include('./partials/footer.ejs') %>

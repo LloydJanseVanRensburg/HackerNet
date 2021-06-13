@@ -8,7 +8,7 @@
 
     <% if(isAdmin) { %>
       <div class="single_thread_controls">
-        <a href="/forums/1/edit" class="btn btn-secondary">Edit</a>
+        <a href="/forums/<%= forumData.forum_id %>/edit" class="btn btn-secondary">Edit</a>
 
         <form action="">
           <button type="submit" class="btn btn-danger">Delete</button>
@@ -18,44 +18,29 @@
   </div>
 
   <div class="profile__img">
-    <img src="/public/images/c3_logo.png" alt="avatar image">
+    <img src="/<%= forumData.image_url %>" alt="avatar image">
   </div>
 
   <div class="profile__info">
     <div>
       <span>Title:</span>
-      <span>CSharp</span>
+      <span><%= forumData.title %></span>
     </div>
     <div>
       <span>Description:</span>
-      <span>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Debitis laborum voluptate sint vel doloremque dignissimos fuga, qui corporis et harum fugit nostrum iusto, inventore quisquam?</span>
+      <span><%= forumData.description %></span>
     </div>
     <div>
       <span>Followers</span>
-      <span><%= followers %></span>
+      <span><%= followerCount %></span>
     </div>
   </div>
 
-  <h4 class="profile__subtext">Total Threads (<%= threadCount %>)</h4>
+  <h4 class="profile__subtext">Total Threads (<%= threads.length %>)</h4>
 
-  <%- include('./partials/thread.ejs') %>
-  <%- include('./partials/thread.ejs') %>
-  <%- include('./partials/thread.ejs') %>
-  <%- include('./partials/thread.ejs') %>
-  <%- include('./partials/thread.ejs') %>
-  <%- include('./partials/thread.ejs') %>
-  <%- include('./partials/thread.ejs') %>
-  <%- include('./partials/thread.ejs') %>
-  <%- include('./partials/thread.ejs') %>
-  <%- include('./partials/thread.ejs') %>
-  <%- include('./partials/thread.ejs') %>
-  <%- include('./partials/thread.ejs') %>
-  <%- include('./partials/thread.ejs') %>
-  <%- include('./partials/thread.ejs') %>
-  <%- include('./partials/thread.ejs') %>
-  <%- include('./partials/thread.ejs') %>
-  <%- include('./partials/thread.ejs') %>
-  <%- include('./partials/thread.ejs') %>
+  <% threads.forEach(thread => { %>
+    <%- include('./partials/thread.ejs', { thread }) %>
+  <% }) %>
 
 </div>
 

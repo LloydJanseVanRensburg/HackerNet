@@ -25,8 +25,16 @@
 
   <p class="single_thread_text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Error aperiam unde mollitia veniam commodi at totam nam illum adipisci neque. A quae distinctio repellendus tempora. Obcaecati, nam beatae incidunt pariatur aut doloremque a numquam sit voluptatem quidem veritatis repellat libero molestiae, architecto est dolorum, natus eos dolore? Consequuntur animi, recusandae repellat veritatis fuga error ullam similique ad autem commodi? Tempora earum expedita autem consequatur perspiciatis, eligendi tenetur eos laudantium assumenda at? Aliquam dolores nostrum laboriosam provident sit, corporis adipisci ipsa nisi. Delectus assumenda obcaecati vel omnis quos fugiat error pariatur autem deleniti possimus vero, dolores, totam tempore ducimus voluptatibus eligendi!</p>
 
-  <div>
-    <h4 class="single_thread_title">Comments (2)</h4>
+  <div class="single_thread_comments">
+    <div class="single_thread_title-container">
+      <h4 class="single_thread_title">Comments (2)</h4>
+
+      <button class="btn btn-secondary">Leave Comment</button>
+    </div>
+
+    <%- include('./partials/comment.ejs', { ownsComment: false}) %>
+    <%- include('./partials/comment.ejs', { ownsComment: true}) %>
+
   </div>
 
 

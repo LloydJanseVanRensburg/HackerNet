@@ -1,18 +1,20 @@
 <%- include('./partials/header.ejs') %>
 
-<%- include('./partials/navbar.ejs', { isAuth, link: "Feed" }) %>
+<%- include('./partials/navbar.ejs', { link: "Feed" }) %>
 
 <div class="container">
 
   <div class="feed__header">
     <h1 class="page__title">Feed Page</h1>
+    
 
     <a href="/threads/new" class="btn btn-secondary">Create Thread</a>
   </div>
 
-  <%- include("./partials/thread.ejs") %>
-  <%- include("./partials/thread.ejs") %>
-  <%- include("./partials/thread.ejs") %>
+  <% feedData.forEach(data => { %>   
+    <%- include('./partials/thread.ejs', { data } ) %>
+  <% }); %>
+
 
 </div>
 

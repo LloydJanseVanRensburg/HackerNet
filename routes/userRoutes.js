@@ -1,16 +1,26 @@
 const express = require("express");
 const userControllers = require("../controllers/userControllers");
-const isAuth = require("../middleware/isAuth");
+const { protect, authorize } = require("../middleware/auth");
 const router = express.Router();
 
 // @route - /users/
 // @desc - GET get all of the users from the database
 // @access - Private &  Admin Only
-router.get("/", isAuth, userControllers.getAllUsers);
+router.get(
+  "/",
+  protect,
+  authorize("User", "Admin"),
+  userControllers.getAllUsers
+);
 
 // @route - /users/myprofile
 // @desc - GET to get the HTML myprofile page
 // @access - Private
-router.get("/myprofile", userControllers.getMyProfilePage);
+router.get(
+  "/myprofile",
+  protect,
+  authorize("User", "Admin"),
+  userControllers.getMyProfilePage
+);
 
 module.exports = router;

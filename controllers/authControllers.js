@@ -35,7 +35,6 @@ exports.loginUser = async (req, res, next) => {
   try {
     let { email, password } = req.body;
 
-    console.log({ email, password });
     // Check if user exists
     let sql = "SELECT * FROM users WHERE email = ?;";
     const [user, _] = await db.execute(sql, [email]);
@@ -54,7 +53,7 @@ exports.loginUser = async (req, res, next) => {
     // Login user by redirecting to home screen and creating session
     req.session.isLoggedIn = true;
     req.session.userId = user[0].user_id;
-    res.status(200).redirect("/");
+    res.status(200).redirect("/feed");
   } catch (error) {
     next(error);
   }
@@ -68,12 +67,12 @@ exports.registerUser = async (req, res, next) => {
 
     let newUser = new User(firstName, lastName, email, hashedPassword);
 
-    newUser = await newUser.save();
+    await newUser.save();
 
     // Redirect to home and create session for this user
     req.session.isAuthenticated = true;
     req.session.userId = newUser.userId;
-    res.status(201).redirect("/");
+    res.status(201).redirect("/feed");
   } catch (error) {
     next(error);
   }

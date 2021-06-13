@@ -2,25 +2,36 @@ const db = require("../config/db");
 const { v4: uuidv4 } = require("uuid");
 
 class Thread {
-  constructor(userId, forumId, title, body, imageUrl) {
-    this.userId = userId;
-    this.forumId = forumId;
-    this.threadId = uuidv4();
-    this.createdAt = new Date(Date.now());
+  constructor(user_id, forum_id, title, body, image_url) {
+    this.thread_id = uuidv4();
+    this.created_at = new Date(Date.now());
+    this.user_id = user_id;
+    this.forum_id = forum_id;
     this.title = title;
     this.body = body;
-    this.imageUrl = imageUrl;
+    this.image_url = image_url;
   }
 
-  save() {}
+  save() {
+    let sql =
+      "INSERT INTO threads(thread_id, user_id, forum_id, title, body, image_url, created_at) VALUES(?,?,?,?,?,?,?);";
 
-  static findAll() {}
+    return db.execute(sql, [
+      this.thread_id,
+      this.user_id,
+      this.forum_id,
+      this.title,
+      this.body,
+      this.image_url,
+      this.created_at,
+    ]);
+  }
 
-  static findById(id) {}
+  static findUserThreads(userId) {
+    let sql = "SELECT * FROM threads WHERE user_id = ?;";
 
-  static findByIdAndUpdate(id, updatedData) {}
-
-  static findByIdAndDelete(id) {}
+    return db.execute(sql, [userId]);
+  }
 }
 
 module.exports = Thread;
