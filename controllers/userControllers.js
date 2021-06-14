@@ -4,17 +4,17 @@ const Thread = require("../models/Thread");
 exports.getMyProfilePage = async (req, res, next) => {
   try {
     const [user, _a] = await User.findById(req.user.user_id);
-
     const [threads, _b] = await Thread.findUserThreads(req.user.user_id);
+
+    let profileData = {
+      threads,
+      ...user[0],
+    };
 
     let pageData = {
       pageTitle: "My Profile",
-      isAuth: true,
-      firstName: user[0].first_name,
-      lastName: user[0].last_name,
-      email: user[0].email,
-      imageUrl: user[0].image_url,
-      threads: threads,
+      isAuth: req.session.isLoggedIn,
+      profileData,
     };
 
     res.render("profile", pageData);

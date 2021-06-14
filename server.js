@@ -4,6 +4,7 @@ const path = require("path");
 const express = require("express");
 const errorHandler = require("./middleware/errorHandler");
 const session = require("express-session");
+const methodOverride = require("method-override");
 const morgan = require("morgan");
 const app = express();
 
@@ -11,6 +12,7 @@ const app = express();
 app.set("view engine", "ejs");
 
 // Middleware
+app.use(methodOverride("_method"));
 app.use(express.urlencoded({ extended: false }));
 app.use("/public", express.static(path.join(__dirname, "public")));
 app.use(morgan("dev"));

@@ -6,29 +6,33 @@
   <h1 class="profile__header page__title">Profile Page</h1>
 
   <div class="profile__img">
-    <img src="/public/uploads/avatar_image.png" alt="avatar image">
+    <% if(profileData.image_url === null) { %>
+        <img src="/public/uploads/avatar_image.png" alt="avatar image">
+    <% } else { %>
+        <img src="/<%= profileData.image_url %>" alt="avatar image">
+    <% } %>
   </div>
 
   <div class="profile__info">
     <div>
       <span>First Name:</span>
-      <span><%= firstName %></span>
+      <span><%= profileData.first_name %></span>
     </div>
     <div>
       <span>Last Name:</span>
-      <span><%= lastName %></span>
+      <span><%= profileData.last_name %></span>
     </div>
     <div>
       <span>Email Address:</span>
-      <span><%= email %>></span>
+      <span><%= profileData.email %>></span>
     </div>
   </div>
 
-  <h4 class="profile__subtext">Your Threads (<%= threads.length %>)</h4>
+  <h4 class="profile__subtext">Your Threads (<%= profileData.threads.length %>)</h4>
 
-  <% if(threads.length > 0) { %>
-    <% threads.forEach((thread) => { %>
-      <%- include('./partials/thread.ejs', { thread }) %>
+  <% if(profileData.threads.length > 0) { %>
+    <% profileData.threads.forEach((data) => { %>
+      <%- include('./partials/thread.ejs', { data }) %>
     <% }) %>
   <% } %>
 </div>

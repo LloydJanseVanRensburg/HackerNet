@@ -27,10 +27,41 @@ class Thread {
     ]);
   }
 
+  static findById(threadId) {
+    let sql = "SELECT * FROM threads WHERE thread_id = ?";
+
+    return db.execute(sql, [threadId]);
+  }
+
   static findUserThreads(userId) {
-    let sql = "SELECT * FROM threads WHERE user_id = ?;";
+    let sql = `SELECT f.title as 'forum_title', f.image_url as 'forum_image', f.forum_id, u.first_name, u.last_name, 
+               t.title as 'thread_title', t.image_url as 'thread_image', t.body, t.thread_id, t.created_at
+               FROM threads t 
+               INNER JOIN users u 
+               ON u.user_id = ? AND t.user_id = u.user_id 
+               INNER JOIN forums f
+               ON f.forum_id = t.forum_id
+               ORDER BY t.created_at;`;
 
     return db.execute(sql, [userId]);
+  }
+
+  static findByIdAndDelete(threadId) {
+    let sqlA = "DELETE FROM threads WHERE thread_id = ?";
+
+    return db.execute(sqlA, [threadId]);
+  }
+
+  static findByIdAndUpdate(threadId, threadData) {
+    let sqlA =
+      "UPDATE threads SET title = ?, body = ?, image_url = ? WHERE thread_id = ?";
+
+    return db.execute(sqlA, [
+      threadData.title,
+      threadData.body,
+      threadData.image_url,
+      threadId,
+    ]);
   }
 }
 

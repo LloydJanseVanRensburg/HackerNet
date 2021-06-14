@@ -29,8 +29,70 @@ class Forum {
     return db.execute(sql, [forumId]);
   }
 
-  static findAllThreads(forumId) {
-    let sql = "SELECT * FROM threads WHERE forum_id = ?";
+  static async findByIdAndUpdate(forumId, forumData) {
+    try {
+      let sqlA = "SELECT Count(*) FROM forums WHERE forum_id = ?";
+
+      const [resA, _a] = await db.execute(sqlA, [forumId]);
+
+      if (resA.length === 0) {
+        return next(new Error(`No forum with id: ${forumId} was found`));
+      }
+
+      let sqlB =
+        "UPDATE forums SET description = ?, title = ?, image_url = ? WHERE forum_id = ?";
+
+      return db.execute(sqlB, [
+        forumData.description,
+        forumData.title,
+        forumData.image_url,
+        forumId,
+      ]);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async deleteForumById(forumId) {
+    let sqlA = "SELECT Count(*) FROM forums WHERE forum_id = ?";
+
+    const [resA, _a] = await db.execute(sqlA, [forumId]);
+
+    if (resA.length === 0) {
+      return next(new Error(`No forum with id: ${forumId} was found`));
+    }
+
+    let sqlB = "DELETE FROM forums WHERE forum_id = ?";
+
+    return db.execute(sqlB, [forumId]);
+  }
+
+  static isForumFollower(forumId, userId) {
+    let sqlA =
+      "SELECT Count(*) as 'count' FROM forums_followers WHERE forum_id = ? AND user_id = ?";
+
+    return db.execute(sqlA, [forumId, userId]);
+  }
+
+  static followForum(forumId, userId) {
+    let sqlA =
+      "INSERT INTO forums_followers(forum_id, user_id, created_at) VALUES(?, ?, ?)";
+
+    let createdAt = new Date(Date.now());
+
+    return db.execute(sqlA, [forumId, userId, createdAt]);
+  }
+
+  static unfollowForum(forumId, userId) {
+    let sqlA =
+      "DELETE FROM forums_followers WHERE forum_id = ? AND user_id = ?";
+
+    return db.execute(sqlA, [forumId, userId]);
+  }
+
+  static findAllForumThreads(forumId) {
+    let sql =
+      "SELECT t.title as 'thread_title', t.image_url as 'thread_image', t.thread_id, t.body, t.created_at, u.first_name, u.last_name, u.user_id, f.title as 'forum_title', f.forum_id, f.image_url as 'forum_image' FROM threads t INNER JOIN users u ON u.user_id = t.user_id INNER JOIN forums f ON t.forum_id = f.forum_id AND f.forum_id = ?";
 
     return db.execute(sql, [forumId]);
   }

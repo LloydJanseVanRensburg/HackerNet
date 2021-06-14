@@ -8,32 +8,36 @@
 
     <% if(ownsThread) { %>
       <div class="single_thread_controls">
-        <a href="/threads/1/edit" class="btn btn-secondary">Edit</a>
+        <a href="/threads/<%= threadData.thread_id  %>/edit" class="btn btn-secondary">Edit</a>
 
-        <form action="">
+        <form action="/threads/<%= threadData.thread_id %>?_method=DELETE" method="POST">
           <button type="submit" class="btn btn-danger">Delete</button>
         </form>
       </div>
     <% } %>
   </div>
 
-  <div class="single_thread_img">
-    <img src="/public/uploads/csharp_code_snippet.PNG" alt="thread image upload">
-  </div>
+  <% if(threadData.image_url) { %>
+    <div class="single_thread_img">
+      <img src="/<%= threadData.image_url %>" alt="thread image upload">
+    </div>
+  <% } %>
 
-  <h4 class="single_thread_title">Thread Title</h4>
+  <h4 class="single_thread_title"><%= threadData.title %></h4>
 
-  <p class="single_thread_text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Error aperiam unde mollitia veniam commodi at totam nam illum adipisci neque. A quae distinctio repellendus tempora. Obcaecati, nam beatae incidunt pariatur aut doloremque a numquam sit voluptatem quidem veritatis repellat libero molestiae, architecto est dolorum, natus eos dolore? Consequuntur animi, recusandae repellat veritatis fuga error ullam similique ad autem commodi? Tempora earum expedita autem consequatur perspiciatis, eligendi tenetur eos laudantium assumenda at? Aliquam dolores nostrum laboriosam provident sit, corporis adipisci ipsa nisi. Delectus assumenda obcaecati vel omnis quos fugiat error pariatur autem deleniti possimus vero, dolores, totam tempore ducimus voluptatibus eligendi!</p>
+  <p class="single_thread_text"><%= (new Date(threadData.created_at)).toISOString().split("T")[0] %></p>
+
+  <p class="single_thread_text"><%= threadData.body %></p>
 
   <div class="single_thread_comments">
     <div class="single_thread_title-container">
-      <h4 class="single_thread_title">Comments (2)</h4>
+      <h4 class="single_thread_title">Comments (0)</h4>
 
       <button class="btn btn-secondary">Leave Comment</button>
     </div>
-
+<!-- 
     <%- include('./partials/comment.ejs', { ownsComment: false}) %>
-    <%- include('./partials/comment.ejs', { ownsComment: true}) %>
+    <%- include('./partials/comment.ejs', { ownsComment: true}) %> -->
 
   </div>
 

@@ -13,23 +13,18 @@
 
   </div>
 
-  <div class="thread__image">
-    <img src="/<%= data.thread_image %>" alt="code snippet">
-  </div>
+  <% if(data.thread_image) { %>
+    <div class="thread__image">
+      <img src="/<%= data.thread_image %>" alt="code snippet">
+    </div>
+  <% } %>
 
   <h4 class="thread__title"><%= data.thread_title %></h4>
 
+  <p class="thread__text"><%= (new Date(data.created_at)).toISOString().split("T")[0] %></p>
+
   <p class="thread__text"><%= data.body %></p>
 
-  <ul class="thread__controls">
-    <li>
-      <a href="/threads/<%= data.thread_id %>">View</a>
-    </li>
-    <li>
-      <button>Comment</button>
-    </li>
-    <li>
-      <button>Like</button>
-    </li>
-  </ul>
+  <a href="/threads/<%= data.thread_id %>" class="btn btn-primary btn-block">View</a>
+
 </div>

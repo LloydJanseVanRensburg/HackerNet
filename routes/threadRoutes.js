@@ -35,6 +35,26 @@ router.get(
   threadControllers.getThreadPage
 );
 
+// @route - /threads/:id
+// @desc - PUT to update a thread by id
+// @access - Private
+router.put(
+  "/:id",
+  protect,
+  authorize("User", "Admin"),
+  threadControllers.updateThreadById
+);
+
+// @route - /threads/:id
+// @desc - DELETE to delete thread by id
+// @access - Private
+router.delete(
+  "/:id",
+  protect,
+  authorize("User", "Admin"),
+  threadControllers.deleteThreadById
+);
+
 // @route - /threads/:id/edit
 // @desc - GET to get the HTML edit single thread page
 // @access - Private

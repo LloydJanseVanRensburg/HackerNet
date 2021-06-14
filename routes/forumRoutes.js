@@ -45,14 +45,55 @@ router.get(
   forumControllers.getForumPage
 );
 
+// @route - /forums/:id
+// @desc - PUT route to make update to forum with id
+// @access - Private | Admin Only
+router.put(
+  "/:id",
+  protect,
+  authorize("Admin"),
+  uploader.single("image"),
+  forumControllers.editForumById
+);
+
+// @route - /forums/:id
+// @desc - DELETE route to delete forum with id
+// @access - Private | Admin Only
+router.delete(
+  "/:id",
+  protect,
+  authorize("Admin"),
+  forumControllers.deleteForumById
+);
+
 // @route - /forums/:id/edit
 // @desc - GET to get the HTML edit forum page
-// @access - Private
+// @access - Private | Admin Only
 router.get(
   "/:id/edit",
   protect,
   authorize("Admin"),
   forumControllers.getEditForumPage
+);
+
+// @route - /forums/:id/follow
+// @desc - GET to follow forum by id
+// @access - Private
+router.get(
+  "/:id/follow",
+  protect,
+  authorize("User", "Admin"),
+  forumControllers.followForum
+);
+
+// @route - /forums/:id/unfollow
+// @desc - GET to unfollow forum by id
+// @access - Private
+router.get(
+  "/:id/unfollow",
+  protect,
+  authorize("User", "Admin"),
+  forumControllers.unfollowForum
 );
 
 module.exports = router;

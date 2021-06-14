@@ -6,11 +6,17 @@
   <div class="single_thread_header">
     <h1 class=" page__title">Forum Page</h1>
 
+    <% if(forumFollower) { %>
+      <a href="/forums/<%= forumData.forum_id %>/unfollow" class="btn btn-secondary">unfollow</a>
+    <% } else { %>
+      <a href="/forums/<%= forumData.forum_id %>/follow" class="btn btn-secondary">follow</a>
+    <% } %>
+
     <% if(isAdmin) { %>
       <div class="single_thread_controls">
         <a href="/forums/<%= forumData.forum_id %>/edit" class="btn btn-secondary">Edit</a>
 
-        <form action="">
+        <form action="/forums/<%= forumData.forum_id %>?_method=DELETE" method="POST">
           <button type="submit" class="btn btn-danger">Delete</button>
         </form>
       </div>
@@ -38,8 +44,8 @@
 
   <h4 class="profile__subtext">Total Threads (<%= threads.length %>)</h4>
 
-  <% threads.forEach(thread => { %>
-    <%- include('./partials/thread.ejs', { thread }) %>
+  <% threads.forEach(data => { %>
+    <%- include('./partials/thread.ejs', { data }) %>
   <% }) %>
 
 </div>
