@@ -33,7 +33,7 @@ app.use("/auth", require("./routes/authRoutes"));
 app.use("/forums", require("./routes/forumRoutes"));
 app.use("/threads", require("./routes/threadRoutes"));
 app.use("/users", require("./routes/userRoutes"));
-// app.use("/comments", require("./routes/commentRoutes"));
+app.use("/comments", require("./routes/commentRoutes"));
 
 // Global Error Handler
 app.use(errorHandler);

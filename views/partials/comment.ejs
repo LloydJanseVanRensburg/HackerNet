@@ -1,15 +1,15 @@
 <div class="comment_container">
   <div class="comment_header">
-    <span>Comment Title</span>
+    <span><%= comment.title %></span>
 
-    <% if(ownsComment) { %>
+    <% if(comment.user_id === userId) { %>
       <form action="">
         <button class="btn btn-danger">Delete</button>
       </form>
     <% } else { %> 
-      <span>Comment Creator</span>
+      <span><%= comment.first_name %> <%= comment.last_name %></span>
     <% } %>
   </div>
 
-  <p class="comment_text">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestiae enim debitis beatae cum commodi error sed? Maiores consequatur velit laudantium ipsum perferendis est nesciunt necessitatibus!</p>
+  <p class="comment_text"><%= comment.body %></p>
 </div>

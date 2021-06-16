@@ -1,31 +1,26 @@
 const express = require("express");
 const commentControllers = require("../controllers/commentControllers");
-const isAuth = require("../middleware/isAuth");
+const { protect, authorize } = require("../middleware/auth");
 const router = express.Router();
 
-// @route - /comments/
-// @desc - GET to get all comments from database
-// @access - Private & Admin Only
-router.get("/", isAuth, commentControllers.getAllPosts);
-
-// @route - /comments/
-// @desc - POST create a new comment in database
+// @route  - /comments/new/:threadId
+// @desc   - Fetch HTML page (form) to create new comment on thread with threadId
 // @access - Private
-router.post("/", isAuth, commentControllers.createPost);
+router.get(
+  "/new/:threadId",
+  protect,
+  authorize("Admin", "User"),
+  commentControllers.getCreateCommentPage
+);
 
-// @route - /comments/:id
-// @desc - GET a comment by primary key id
+// @route  - /comments/new/:threadId
+// @desc   - POST create new comment in database
 // @access - Private
-router.get("/:id", isAuth, commentControllers.getPostById);
-
-// @route - /comments/:id
-// @desc - PUT to update a given comment by id
-// @access - Private
-router.put("/:id", isAuth, commentControllers.updatePost);
-
-// @route - /comments/:id
-// @desc - DELETE to delete a comment by id
-// @access - Private
-router.delete("/:id", isAuth, commentControllers.delete);
+router.post(
+  "/new/:threadId",
+  protect,
+  authorize("Admin", "User"),
+  commentControllers.createComment
+);
 
 module.exports = router;

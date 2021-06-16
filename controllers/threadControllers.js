@@ -3,25 +3,29 @@ const Thread = require("../models/Thread");
 
 exports.getThreadPage = async (req, res, next) => {
   try {
-    const [thread, _] = await Thread.findById(req.params.id);
-    let ownsThread = false;
+    const [thread, _a] = await Thread.findById(req.params.id);
+    const [threadComments, _b] = await Thread.findThreadsComments(
+      req.params.id
+    );
+
+    const userId = req.user.user_id;
+
+    console.log(userId);
 
     if (thread.length === 0) {
       res.status(404).redirect("/feed");
-    }
-
-    if (thread[0].user_id === req.user.user_id) {
-      ownsThread = true;
     }
 
     let pageData = {
       pageTitle: "Thread Page",
       isAuth: req.session.isLoggedIn,
       threadData: thread[0],
-      ownsThread,
+      threadComments,
+      userId,
     };
 
     res.render("view-thread", pageData);
+    // res.send("Working On it...");
   } catch (error) {
     next(error);
   }

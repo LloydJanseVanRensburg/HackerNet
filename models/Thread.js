@@ -46,6 +46,20 @@ class Thread {
     return db.execute(sql, [userId]);
   }
 
+  static findThreadsComments(threadId) {
+    let sqlA = `
+      SELECT c.title, c.body, c.created_at, c.user_id, u.first_name, u.last_name 
+      FROM comments c 
+      INNER JOIN threads t 
+      ON c.thread_id = ?  AND c.thread_id = t.thread_id
+      INNER JOIN users u 
+      ON c.user_id = u.user_id 
+      ORDER BY c.created_at DESC;
+      `;
+
+    return db.execute(sqlA, [threadId]);
+  }
+
   static findByIdAndDelete(threadId) {
     let sqlA = "DELETE FROM threads WHERE thread_id = ?";
 

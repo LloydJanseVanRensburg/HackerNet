@@ -6,7 +6,9 @@ exports.getFeedPage = async (req, res, next) => {
 
     let user_id = req.user.user_id;
 
-    const feedData = await myFeed.getMyFeedData(user_id);
+    const [feedData, _a] = await myFeed.getMyFeedData(user_id);
+
+    console.log(feedData);
 
     let pageData = {
       isAuth: true,

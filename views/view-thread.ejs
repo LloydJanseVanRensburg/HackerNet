@@ -6,7 +6,7 @@
   <div class="single_thread_header">
     <h1 class="page__title">Thread Page</h1>
 
-    <% if(ownsThread) { %>
+    <% if(threadData.user_id === userId) { %>
       <div class="single_thread_controls">
         <a href="/threads/<%= threadData.thread_id  %>/edit" class="btn btn-secondary">Edit</a>
 
@@ -31,13 +31,14 @@
 
   <div class="single_thread_comments">
     <div class="single_thread_title-container">
-      <h4 class="single_thread_title">Comments (0)</h4>
+      <h4 class="single_thread_title">Comments (<%= threadComments.length %>)</h4>
 
-      <button class="btn btn-secondary">Leave Comment</button>
+      <a href="/comments/new/<%= threadData.thread_id %>" class="btn btn-secondary">Leave Comment</a>
     </div>
-<!-- 
-    <%- include('./partials/comment.ejs', { ownsComment: false}) %>
-    <%- include('./partials/comment.ejs', { ownsComment: true}) %> -->
+
+    <% threadComments.forEach((comment) => { %>
+      <%- include('./partials/comment.ejs', { comment, userId }) %>
+    <% }) %>
 
   </div>
 
