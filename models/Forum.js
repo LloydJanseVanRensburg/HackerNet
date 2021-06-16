@@ -91,8 +91,28 @@ class Forum {
   }
 
   static findAllForumThreads(forumId) {
-    let sql =
-      "SELECT t.title as 'thread_title', t.image_url as 'thread_image', t.thread_id, t.body, t.created_at, u.first_name, u.last_name, u.user_id, f.title as 'forum_title', f.forum_id, f.image_url as 'forum_image' FROM threads t INNER JOIN users u ON u.user_id = t.user_id INNER JOIN forums f ON t.forum_id = f.forum_id AND f.forum_id = ?";
+    let sql = `
+        SELECT 
+        t.title AS 'thread_title', 
+        t.image_url AS 'thread_image', 
+        t.thread_id, 
+        t.body, 
+        t.created_at, 
+        u.first_name AS 'creator_fname', 
+        u.last_name AS 'creator_lname', 
+        u.user_id, 
+        f.title AS 'forum_title', 
+        f.forum_id, 
+        f.image_url AS 'forum_image' 
+        FROM threads t 
+        INNER JOIN users u 
+          ON 
+            u.user_id = t.user_id 
+        INNER JOIN forums f 
+          ON 
+            t.forum_id = f.forum_id 
+          AND 
+            f.forum_id = ?`;
 
     return db.execute(sql, [forumId]);
   }

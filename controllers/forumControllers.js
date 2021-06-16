@@ -1,6 +1,6 @@
 const Forum = require("../models/Forum");
 
-exports.getForumsPage = async (req, res, next) => {
+exports.forumsPage = async (req, res, next) => {
   try {
     const forumYouFollow = await Forum.findMyJoinedForums(req.session.userId);
     const [allForums, _] = await Forum.findAllForums();
@@ -13,13 +13,13 @@ exports.getForumsPage = async (req, res, next) => {
       allForums,
     };
 
-    res.render("forums", pageData);
+    res.status(200).render("forums", pageData);
   } catch (error) {
     next(error);
   }
 };
 
-exports.getForumPage = async (req, res, next) => {
+exports.forumPage = async (req, res, next) => {
   try {
     const forum_id = req.params.id;
     const user_id = req.user.user_id;
@@ -42,19 +42,19 @@ exports.getForumPage = async (req, res, next) => {
       forumFollower: isForumFollower[0].count,
     };
 
-    res.render("forum", pageData);
+    res.status(200).render("forum", pageData);
   } catch (error) {
     next(error);
   }
 };
 
-exports.getCreateForumPage = (req, res, next) => {
+exports.createNewForumPage = (req, res, next) => {
   let pageData = {
     pageTitle: "Create Forum Page",
     isAuth: true,
   };
 
-  res.render("create-forum", pageData);
+  res.status(200).render("create-forum", pageData);
 };
 
 exports.createNewForum = async (req, res, next) => {
@@ -67,13 +67,13 @@ exports.createNewForum = async (req, res, next) => {
 
     await newForum.save();
 
-    res.redirect(`/forums/${newForum.forum_id}`);
+    res.status(201).redirect(`/forums/${newForum.forum_id}`);
   } catch (error) {
     next(error);
   }
 };
 
-exports.getEditForumPage = async (req, res, next) => {
+exports.editForumPage = async (req, res, next) => {
   try {
     let forum_id = req.params.id;
     let [resA, _a] = await Forum.findById(forum_id);
@@ -84,13 +84,13 @@ exports.getEditForumPage = async (req, res, next) => {
       forumData: resA[0],
     };
 
-    res.render("edit-forum", pageData);
+    res.status(200).render("edit-forum", pageData);
   } catch (error) {
     next(error);
   }
 };
 
-exports.editForumById = async (req, res, next) => {
+exports.editForum = async (req, res, next) => {
   try {
     let { title, description } = req.body;
     let image_url;
@@ -103,10 +103,8 @@ exports.editForumById = async (req, res, next) => {
 
     const [forum, _a] = await Forum.findById(forum_id);
 
-    console.log({ before_forum: forum[0] });
-
     if (forum[0].length === 0) {
-      return res.redirect(`/forums/${forum_id}`);
+      return res.status(404).redirect(`/forums/${forum_id}`);
     }
 
     if (title) forum[0].title = title;
@@ -115,43 +113,43 @@ exports.editForumById = async (req, res, next) => {
 
     await Forum.findByIdAndUpdate(forum_id, forum[0]);
 
-    res.redirect(`/forums/${forum_id}`);
+    res.status(201).redirect(`/forums/${forum_id}`);
   } catch (error) {
     next(error);
   }
 };
 
-exports.deleteForumById = async (req, res, next) => {
+exports.deleteForum = async (req, res, next) => {
   try {
     await Forum.deleteForumById(req.params.id);
 
-    res.redirect("/forums");
+    res.status(204).redirect("/forums");
   } catch (error) {
     next(error);
   }
 };
 
-exports.followForum = async (req, res, next) => {
+exports.addForumFollower = async (req, res, next) => {
   try {
     let forum_id = req.params.id;
     let user_id = req.user.user_id;
 
     await Forum.followForum(forum_id, user_id);
 
-    res.redirect(`/forums/${forum_id}`);
+    res.status(201).redirect(`/forums/${forum_id}`);
   } catch (error) {
     next(error);
   }
 };
 
-exports.unfollowForum = async (req, res, next) => {
+exports.removeForumFollower = async (req, res, next) => {
   try {
     let forum_id = req.params.id;
     let user_id = req.user.user_id;
 
     await Forum.unfollowForum(forum_id, user_id);
 
-    res.redirect(`/forums/${forum_id}`);
+    res.status(204).redirect(`/forums/${forum_id}`);
   } catch (error) {
     next(error);
   }

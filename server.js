@@ -27,13 +27,14 @@ app.use(
 );
 
 // Requests Routing
-app.get("/", (req, res) => res.redirect("/feed"));
 app.use("/feed", require("./routes/feedRoutes"));
 app.use("/auth", require("./routes/authRoutes"));
 app.use("/forums", require("./routes/forumRoutes"));
 app.use("/threads", require("./routes/threadRoutes"));
 app.use("/users", require("./routes/userRoutes"));
 app.use("/comments", require("./routes/commentRoutes"));
+app.use("/polls", require("./routes/pollRoutes"));
+app.use((req, res, next) => res.status(404).render("page404"));
 
 // Global Error Handler
 app.use(errorHandler);

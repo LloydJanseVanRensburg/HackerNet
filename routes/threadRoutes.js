@@ -22,7 +22,7 @@ router.get(
   "/new",
   protect,
   authorize("User", "Admin"),
-  threadControllers.getCreateThreadPage
+  threadControllers.createNewThreadPage
 );
 
 // @route - /threads/:id
@@ -32,7 +32,7 @@ router.get(
   "/:id",
   protect,
   authorize("User", "Admin"),
-  threadControllers.getThreadPage
+  threadControllers.threadPage
 );
 
 // @route - /threads/:id
@@ -42,7 +42,8 @@ router.put(
   "/:id",
   protect,
   authorize("User", "Admin"),
-  threadControllers.updateThreadById
+  uploader.single("image"),
+  threadControllers.editThread
 );
 
 // @route - /threads/:id
@@ -52,7 +53,7 @@ router.delete(
   "/:id",
   protect,
   authorize("User", "Admin"),
-  threadControllers.deleteThreadById
+  threadControllers.deleteThread
 );
 
 // @route - /threads/:id/edit
@@ -62,7 +63,7 @@ router.get(
   "/:id/edit",
   protect,
   authorize("User", "Admin"),
-  threadControllers.getEditThreadPage
+  threadControllers.editThreadPage
 );
 
 module.exports = router;

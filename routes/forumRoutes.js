@@ -11,7 +11,7 @@ router.get(
   "/",
   protect,
   authorize("User", "Admin"),
-  forumControllers.getForumsPage
+  forumControllers.forumsPage
 );
 
 // @route - /forums/
@@ -32,7 +32,7 @@ router.get(
   "/new",
   protect,
   authorize("Admin"),
-  forumControllers.getCreateForumPage
+  forumControllers.createNewForumPage
 );
 
 // @route - /forums/:id
@@ -42,7 +42,7 @@ router.get(
   "/:id",
   protect,
   authorize("User", "Admin"),
-  forumControllers.getForumPage
+  forumControllers.forumPage
 );
 
 // @route - /forums/:id
@@ -53,7 +53,7 @@ router.put(
   protect,
   authorize("Admin"),
   uploader.single("image"),
-  forumControllers.editForumById
+  forumControllers.editForum
 );
 
 // @route - /forums/:id
@@ -63,7 +63,7 @@ router.delete(
   "/:id",
   protect,
   authorize("Admin"),
-  forumControllers.deleteForumById
+  forumControllers.deleteForum
 );
 
 // @route - /forums/:id/edit
@@ -73,7 +73,7 @@ router.get(
   "/:id/edit",
   protect,
   authorize("Admin"),
-  forumControllers.getEditForumPage
+  forumControllers.editForumPage
 );
 
 // @route - /forums/:id/follow
@@ -83,7 +83,7 @@ router.get(
   "/:id/follow",
   protect,
   authorize("User", "Admin"),
-  forumControllers.followForum
+  forumControllers.addForumFollower
 );
 
 // @route - /forums/:id/unfollow
@@ -93,7 +93,7 @@ router.get(
   "/:id/unfollow",
   protect,
   authorize("User", "Admin"),
-  forumControllers.unfollowForum
+  forumControllers.removeForumFollower
 );
 
 module.exports = router;

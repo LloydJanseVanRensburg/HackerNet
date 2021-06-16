@@ -5,7 +5,7 @@
 <div class="container">
   <h1 class="single_thread_header page__title">Edit Thread</h1>
 
-  <form action="/threads/<%= threadData.thread_id %>?_method=PUT" method="POST">
+  <form action="/threads/<%= threadData.thread_id %>?_method=PUT" method="POST" enctype="multipart/form-data">
 
     <div class="form_group">
       <label for="title">Title</label>

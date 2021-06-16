@@ -10,7 +10,7 @@ router.get(
   "/new/:threadId",
   protect,
   authorize("Admin", "User"),
-  commentControllers.getCreateCommentPage
+  commentControllers.createNewCommentPage
 );
 
 // @route  - /comments/new/:threadId
@@ -20,7 +20,7 @@ router.post(
   "/new/:threadId",
   protect,
   authorize("Admin", "User"),
-  commentControllers.createComment
+  commentControllers.createNewComment
 );
 
 module.exports = router;

@@ -1,6 +1,6 @@
 const Comment = require("../models/Comment");
 
-exports.getCreateCommentPage = (req, res, next) => {
+exports.createNewCommentPage = (req, res, next) => {
   let threadId = req.params.threadId;
 
   let pageData = {
@@ -12,7 +12,7 @@ exports.getCreateCommentPage = (req, res, next) => {
   res.render("create-comment", pageData);
 };
 
-exports.createComment = async (req, res, next) => {
+exports.createNewComment = async (req, res, next) => {
   try {
     let { title, body } = req.body;
     let thread_id = req.params.threadId;

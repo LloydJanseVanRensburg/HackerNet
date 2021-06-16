@@ -1,7 +1,7 @@
 const Forum = require("../models/Forum");
 const Thread = require("../models/Thread");
 
-exports.getThreadPage = async (req, res, next) => {
+exports.threadPage = async (req, res, next) => {
   try {
     const [thread, _a] = await Thread.findById(req.params.id);
     const [threadComments, _b] = await Thread.findThreadsComments(
@@ -9,8 +9,6 @@ exports.getThreadPage = async (req, res, next) => {
     );
 
     const userId = req.user.user_id;
-
-    console.log(userId);
 
     if (thread.length === 0) {
       res.status(404).redirect("/feed");
@@ -24,14 +22,13 @@ exports.getThreadPage = async (req, res, next) => {
       userId,
     };
 
-    res.render("view-thread", pageData);
-    // res.send("Working On it...");
+    res.status(200).render("view-thread", pageData);
   } catch (error) {
     next(error);
   }
 };
 
-exports.getCreateThreadPage = async (req, res, next) => {
+exports.createNewThreadPage = async (req, res, next) => {
   try {
     const forumsYouFollow = await Forum.findMyJoinedForums(req.user.user_id);
 
@@ -41,7 +38,7 @@ exports.getCreateThreadPage = async (req, res, next) => {
       forumsYouFollow,
     };
 
-    res.render("create-thread", pageData);
+    res.status(200).render("create-thread", pageData);
   } catch (error) {
     next(error);
   }
@@ -61,13 +58,13 @@ exports.createNewThread = async (req, res, next) => {
 
     await newThread.save();
 
-    res.redirect(`/threads/${newThread.thread_id}`);
+    res.status(201).redirect(`/threads/${newThread.thread_id}`);
   } catch (error) {
     next(error);
   }
 };
 
-exports.getEditThreadPage = async (req, res, next) => {
+exports.editThreadPage = async (req, res, next) => {
   try {
     let thread_id = req.params.id;
     let [threadData, _a] = await Thread.findById(thread_id);
@@ -78,16 +75,15 @@ exports.getEditThreadPage = async (req, res, next) => {
       threadData: threadData[0],
     };
 
-    res.render("edit-thread", pageData);
+    res.status(200).render("edit-thread", pageData);
   } catch (error) {
     next(error);
   }
 };
 
-exports.updateThreadById = async (req, res, next) => {
+exports.editThread = async (req, res, next) => {
   try {
     let thread_id = req.params.id;
-    let user_id = req.user.user_id;
     let { title, body } = req.body;
     let image_url;
     if (req.file) {
@@ -100,9 +96,13 @@ exports.updateThreadById = async (req, res, next) => {
       return res.status(404).redirect("/feed");
     }
 
+    console.log(thread[0]);
+
     if (title) thread[0].title = title;
     if (body) thread[0].body = body;
     if (image_url) thread[0].image_url = image_url;
+
+    console.log(thread[0]);
 
     await Thread.findByIdAndUpdate(thread_id, thread[0]);
 
@@ -112,7 +112,7 @@ exports.updateThreadById = async (req, res, next) => {
   }
 };
 
-exports.deleteThreadById = async (req, res, next) => {
+exports.deleteThread = async (req, res, next) => {
   try {
     let thread_id = req.params.id;
 
