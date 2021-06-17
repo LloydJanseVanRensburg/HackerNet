@@ -28,6 +28,12 @@ class PollQuestion {
 
     return db.execute(sqlA, placeholders);
   }
+
+  static findByPollId(pollId) {
+    let sqlA = "SELECT * FROM polls_questions WHERE poll_id = ?";
+
+    return db.execute(sqlA, [pollId]);
+  }
 }
 
 module.exports = PollQuestion;

@@ -6,7 +6,16 @@ exports.feedPage = async (req, res, next) => {
 
     let user_id = req.user.user_id;
 
-    const [feedData, _a] = await myFeed.getMyFeedData(user_id);
+    const [threadData, _a] = await myFeed.getMyFeedThreads(user_id);
+    const pollData = await myFeed.getMyFeedPolls(user_id);
+
+    const feedData = [...threadData, ...pollData];
+
+    feedData.sort((el1, el2) => {
+      if (el1.created_at > el2.created_at) return -1;
+      if (el1.created_at < el2.created_at) return 1;
+      return 0;
+    });
 
     let pageData = {
       isAuth: true,

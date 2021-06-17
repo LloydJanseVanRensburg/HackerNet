@@ -12,7 +12,7 @@
   --light-one: #fff;
   --light-two: #f4f4f4;
   --error-color: rgb(194, 1, 20);
-  --success-color: #306b34;
+  --success-color: rgb(48, 107, 52);
   --warn-color: #dfa801;
   --font-family: "Roboto Mono";
   --box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px,
@@ -536,4 +536,70 @@ body {
 .comment_text {
   font-size: 1rem;
   padding-top: 1rem;
+}
+
+/* ======================================================== */
+/*                      Poll Page                         */
+/* ======================================================== */
+.poll__title {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem 0;
+}
+
+.poll__title h4 {
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.poll_submit_form {
+  padding: 1rem;
+  border: 2px solid var(--light-two);
+  background: var(--light-two);
+}
+
+.poll__question {
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.poll__answers {
+  margin-bottom: 8px;
+  position: relative;
+  width: 100%;
+  min-height: 50px;
+}
+
+.poll__answers label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  display: block;
+  background: var(--light-one);
+  border: 2px solid var(--light-two);
+  padding: 8px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: all 0.3s ease-out;
+  transition-property: background, color;
+}
+
+.poll__answers input {
+  display: none;
+}
+
+.poll__answers input:checked ~ label {
+  border: 2px solid var(--success-color);
+  background: rgba(28, 82, 83, 0.2);
+}
+
+.poll__answers label:hover {
+  border: 2px solid var(--dark-two);
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.poll_submit_form > button {
+  margin-top: 1rem;
 }

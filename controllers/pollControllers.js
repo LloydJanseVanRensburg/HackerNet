@@ -2,6 +2,7 @@ const Forum = require("../models/Forum");
 const Poll = require("../models/Poll");
 const PollAnswer = require("../models/Poll_Answer");
 const PollQuestion = require("../models/Poll_Question");
+const PollVote = require("../models/Poll_Vote");
 
 exports.createNewPollPage = async (req, res, next) => {
   try {
@@ -50,8 +51,61 @@ exports.createNewPoll = async (req, res, next) => {
     const answer3 = new PollAnswer(question_id, poll_id, 1, ans3);
     await answer3.save();
 
-    res.send("Working on it...");
-    // res.status(201).redirect(`/polls/${poll_id}`)
+    res.status(201).redirect(`/polls/${poll_id}`);
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.pollPage = async (req, res, next) => {
+  try {
+    let poll_id = req.params.id;
+    let user_id = req.user.user_id;
+
+    let [poll, _a] = await Poll.findById(poll_id);
+
+    let [poll_question, _b] = await PollQuestion.findByPollId(poll_id);
+    let [poll_answers, _c] = await PollAnswer.findByQuestionId(
+      poll_question[0].question_id
+    );
+
+    console.log({ poll, poll_question, poll_answers });
+
+    let pageData = {
+      pageTitle: "View Poll",
+      isAuth: req.session.isLoggedIn,
+      userId: user_id,
+      poll: poll[0],
+      poll_question: poll_question[0],
+      poll_answers,
+    };
+
+    res.status(200).render("view-poll", pageData);
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.createPollVote = async (req, res, next) => {
+  try {
+    console.log("Hit");
+    let { answer } = req.body;
+    let question_id = req.params.questionId;
+    let user_id = req.user.user_id;
+
+    let [pollVote, _a] = await PollVote.findUserVoteForQuestion(
+      user_id,
+      question_id
+    );
+
+    if (pollVote.length > 0) {
+      await PollVote.findByIdAndUpdate(pollVote[0].vote_id, answer);
+    } else {
+      pollVote = new PollVote(user_id, question_id, answer);
+      await pollVote.save();
+    }
+
+    res.status(201).redirect("/feed");
   } catch (error) {
     next(error);
   }

@@ -1,0 +1,72 @@
+<div class="thread__container">
+  <div class="thread__header">
+
+    <div class="thread__info">
+      <div class="avatar">
+        <img src="/<%= data.forum_image %>" alt="forum-logo">
+      </div>
+
+      <h4><%= data.forum_title %></h4>
+    </div>
+
+    <p class="thread__creator"><%= data.creator_fname %> <%=  data.creator_lname  %></p>
+
+  </div>
+
+  <div class="poll__title">
+    <h4 ><%= data.poll_title %></h4>
+    <p><%= (new Date(data.created_at)).toISOString().split("T")[0] %></p>
+  </div>
+
+  <form
+    action="/polls/vote/<%= data.question.question_id %>" 
+    method="POST"
+    class="poll_submit_form"
+  >
+
+    <p class="poll__question"><%= data.question.question %></p>
+
+    <div class="poll__answers">
+      <input 
+        type="radio" 
+        id="<%= data.question.ans1.answer_id %>" 
+        name="answer" 
+        value="<%= data.question.ans1.answer_id %>" 
+        required
+        <%= data.question.userAnswer && data.question.userAnswer === data.question.ans1.answer_id && 'checked'%>
+      >
+      <label for="<%= data.question.ans1.answer_id %>"><%= data.question.ans1.answer %></label>
+    </div>
+
+    <div class="poll__answers">
+      <input 
+        type="radio" 
+        id="<%= data.question.ans2.answer_id %>" 
+        name="answer" 
+        required
+        value="<%= data.question.ans2.answer_id %>"
+        <%= data.question.userAnswer && data.question.userAnswer === data.question.ans2.answer_id && 'checked'%>
+      >
+      <label for="<%= data.question.ans2.answer_id %>"><%= data.question.ans2.answer %></label>
+    </div>
+
+    <div class="poll__answers">
+      <input 
+        type="radio" 
+        id="<%= data.question.ans3.answer_id %>" 
+        name="answer" 
+        required
+        value="<%= data.question.ans3.answer_id %>" 
+        <%= data.question.userAnswer && data.question.userAnswer === data.question.ans3.answer_id && 'checked'%>
+      >
+      <label for="<%= data.question.ans3.answer_id %>"><%= data.question.ans3.answer %></label>
+    </div>
+
+    <button type="submit" class="btn btn-secondary">Submit Answer</button>
+
+  </form>
+
+
+  <a href="/polls/<%= data.poll_id %>" class="btn btn-primary btn-block">View</a>
+
+</div>

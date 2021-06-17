@@ -9,15 +9,15 @@ class PollVote {
     this.answer_id = answerId;
   }
 
-  save() {
+  async save() {
     let sqlA = `
-      INSERT INTO polls_votes(vote_id, user_id, question_id, answer_id)
-      VALUES (
-        'ae97094b-318a-44c4-a7d5-5a5b0df94646',
-          'dca7d98b-abb9-492d-9691-e44d9e1814de',
-          '52f714e6-981b-409e-8fec-13428f9652a5',
-        'd82c7975-66e0-4b94-b194-d484f89885bd'
-      );`;
+    INSERT INTO polls_votes(vote_id, user_id, question_id, answer_id)
+    VALUES (
+      ?,
+      ?,
+      ?,
+      ?
+    );`;
 
     let placeholders = [
       this.vote_id,
@@ -25,6 +25,21 @@ class PollVote {
       this.question_id,
       this.answer_id,
     ];
+
+    return db.execute(sqlA, placeholders);
+  }
+
+  static findByIdAndUpdate(voteId, answerId) {
+    let sqlA = "UPDATE polls_votes SET answer_id = ? WHERE vote_id = ?";
+
+    return db.execute(sqlA, [answerId, voteId]);
+  }
+
+  static findUserVoteForQuestion(userId, questionId) {
+    let sqlA =
+      "SELECT * FROM polls_votes WHERE user_id = ? AND question_id = ?";
+
+    let placeholders = [userId, questionId];
 
     return db.execute(sqlA, placeholders);
   }

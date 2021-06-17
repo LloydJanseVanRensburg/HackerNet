@@ -13,8 +13,12 @@
     </div>
   </div>
 
-  <% feedData.forEach(data => { %>   
-    <%- include('./partials/thread.ejs', { data } ) %>
+  <% feedData.forEach(data => { %>  
+    <% if(data.thread_id) { %>
+      <%- include('./partials/thread.ejs', { data } ) %>
+    <% } else if (data.poll_id) { %>
+      <%- include('./partials/poll.ejs', { data } ) %>
+    <% } %> 
   <% }); %>
 
 

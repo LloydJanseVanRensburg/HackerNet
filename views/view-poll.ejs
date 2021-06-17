@@ -1,0 +1,38 @@
+<%- include('./partials/header.ejs') %>
+
+<%- include('./partials/navbar.ejs', { isAuth, link: "" }) %>
+
+<div class="container">
+  <div class="single_thread_header">
+    <h1 class="page__title">Poll Page</h1>
+
+    <% if(poll.user_id === userId) { %>
+      <div class="single_thread_controls">
+        <a href="/polls/<%= poll.poll_id  %>/edit" class="btn btn-secondary">Edit</a>
+
+        <form action="/polls/<%= poll.poll_id %>?_method=DELETE" method="POST">
+          <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
+      </div>
+    <% } %>
+  </div>
+
+  <h4 class="single_thread_title"><%= poll.title %></h4>
+
+  <p class="single_thread_text"><%= (new Date(poll.created_at)).toISOString().split("T")[0] %></p>
+
+  <p class="single_thread_text"><%= poll_question.content %></p>
+
+  <form action="">
+    <% poll_answers.reverse().forEach((answer, idx) => { %>
+      <input type="radio" id="ans<%= idx + 1 %>" name="answer" value="<%= answer.answer_id %>">
+      <label for="ans<%= idx + 1 %>"><%= answer.content %></label>
+    <% }) %>
+
+    <button type="submit">Submit</button>
+  </form>
+
+</div>
+
+<%- include('./partials/footer.ejs') %>
+

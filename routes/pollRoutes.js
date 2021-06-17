@@ -23,4 +23,24 @@ router.get(
   pollControllers.createNewPollPage
 );
 
+// @route - /polls/:pollId/vote/:questionId
+// @desc - Get HTML page to view poll
+// @access - Private
+router.post(
+  "/vote/:questionId",
+  protect,
+  authorize("Admin", "User"),
+  pollControllers.createPollVote
+);
+
+// @route - /polls/:id
+// @desc - Get HTML page to view poll
+// @access - Private
+router.get(
+  "/:id",
+  protect,
+  authorize("Admin", "User"),
+  pollControllers.pollPage
+);
+
 module.exports = router;
