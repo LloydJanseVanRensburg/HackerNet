@@ -28,12 +28,16 @@
     </div>
   </div>
 
-  <h4 class="profile__subtext">Your Threads (<%= profileData.threads.length %>)</h4>
+  <h4 class="profile__subtext">Your Posts (<%= profileData.postData.length %>)</h4>
 
-  <% if(profileData.threads.length > 0) { %>
-    <% profileData.threads.forEach((data) => { %>
-      <%- include('./partials/thread.ejs', { data }) %>
-    <% }) %>
+  <% if(profileData.postData.length > 0) { %>
+    <% profileData.postData.forEach(data => { %>  
+      <% if(data.thread_id) { %>
+        <%- include('./partials/thread.ejs', { data } ) %>
+      <% } else if (data.poll_id) { %>
+        <%- include('./partials/poll.ejs', { data } ) %>
+      <% } %> 
+    <% }); %> 
   <% } %>
 </div>
 

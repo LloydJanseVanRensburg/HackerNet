@@ -68,8 +68,16 @@ exports.pollPage = async (req, res, next) => {
     let [poll_answers, _c] = await PollAnswer.findByQuestionId(
       poll_question[0].question_id
     );
+    let [poll_vote, _d] = await PollVote.findUserVoteForQuestion(
+      user_id,
+      poll_question[0].question_id
+    );
 
-    console.log({ poll, poll_question, poll_answers });
+    if (poll_vote.length > 0) {
+      poll_vote = poll_vote[0];
+    } else {
+      poll_vote = null;
+    }
 
     let pageData = {
       pageTitle: "View Poll",
@@ -78,6 +86,7 @@ exports.pollPage = async (req, res, next) => {
       poll: poll[0],
       poll_question: poll_question[0],
       poll_answers,
+      poll_vote,
     };
 
     res.status(200).render("view-poll", pageData);
@@ -106,6 +115,103 @@ exports.createPollVote = async (req, res, next) => {
     }
 
     res.status(201).redirect("/feed");
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.updatePollPage = async (req, res, next) => {
+  try {
+    let poll_id = req.params.id;
+    let user_id = req.user.user_id;
+
+    let [pollData, _a] = await Poll.findById(poll_id);
+
+    if (pollData.length === 0) {
+      return res.status(404).redirect("/feed");
+    }
+
+    if (pollData[0].user_id !== user_id) {
+      return res.status(403).redirect("/feed");
+    }
+
+    let [questionData, _b] = await PollQuestion.findByPollId(poll_id);
+
+    let question_id = questionData[0].question_id;
+
+    let [answerData, _c] = await PollAnswer.findByQuestionId(question_id);
+
+    let forumsYouFollow = await Forum.findMyJoinedForums(user_id);
+
+    let pageData = {
+      pageTitle: "Edit Poll",
+      isAuth: req.session.isLoggedIn,
+      pollData: pollData[0],
+      questionData: questionData[0],
+      answerData,
+      forumsYouFollow,
+    };
+
+    res.status(200).render("edit-poll", pageData);
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.updatePoll = async (req, res, next) => {
+  try {
+    let { forum, title, question, ans1, ans2, ans3 } = req.body;
+    let poll_id = req.params.id;
+
+    const [resA, _a] = await Poll.findById(poll_id);
+
+    if (resA.length === 0) {
+      return res.status(404).redirect("/feed");
+    }
+
+    await Poll.findByIdAndUpdate(poll_id, {
+      forum_id: forum,
+      title,
+    });
+
+    const [questionData, _b] = await PollQuestion.findByPollId(poll_id);
+
+    if (questionData.length === 0) {
+      return res.status(404).redirect("/feed");
+    }
+
+    await PollQuestion.findByPollIdAndUpdate(poll_id, question);
+
+    await PollAnswer.findByQuestionIdAndUpdate(questionData[0].question_id, [
+      ans1,
+      ans2,
+      ans3,
+    ]);
+
+    res.status(201).redirect(`/polls/${poll_id}`);
+  } catch (error) {
+    next(error);
+  }
+};
+
+exports.deletePoll = async (req, res, next) => {
+  try {
+    let poll_id = req.params.id;
+    let user_id = req.user.user_id;
+
+    let [resA, _a] = await Poll.findById(poll_id);
+
+    if (resA.length === 0) {
+      return res.status(404).redirect("/feed");
+    }
+
+    if (resA[0].user_id !== user_id) {
+      return res.status(403).redirect("/feed");
+    }
+
+    await Poll.findByIdAndDelete(poll_id);
+
+    res.status(204).redirect("/feed");
   } catch (error) {
     next(error);
   }

@@ -5,16 +5,31 @@
 <div class="container">
   <h1 class="single_thread_header page__title">Create New Comment</h1>
 
-  <form action="/comments/new/<%= threadId %>" method="POST">
+  <form 
+    action="/comments/new/<%= threadId %>" 
+    method="POST"
+  >
 
     <div class="form_group">
       <label for="title">Title</label>
-      <input type="text" name="title" id="title" placeholder="Comment title">
+      <input 
+        type="text" 
+        name="title" 
+        id="title" 
+        placeholder="Comment title"
+        required
+      >
     </div>
 
     <div class="form_group">
       <label for="body">Body</label>
-      <textarea name="body" id="body" rows="10" placeholder="Comment Body"></textarea>
+      <textarea 
+        name="body" 
+        id="body" 
+        rows="10" 
+        placeholder="Comment Body"
+        required
+      ></textarea>
     </div>
 
     <button class="btn btn-primary">Create</button>

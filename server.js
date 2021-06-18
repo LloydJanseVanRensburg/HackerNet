@@ -6,6 +6,7 @@ const errorHandler = require("./middleware/errorHandler");
 const session = require("express-session");
 const methodOverride = require("method-override");
 const morgan = require("morgan");
+const flash = require("connect-flash");
 const app = express();
 
 // Set EJS as view engine and server views file
@@ -25,6 +26,8 @@ app.use(
     saveUninitialized: false,
   })
 );
+
+app.use(flash());
 
 // Requests Routing
 app.use("/feed", require("./routes/feedRoutes"));

@@ -1,13 +1,27 @@
 const User = require("../models/User");
 const Thread = require("../models/Thread");
+const Poll = require("../models/Poll");
 
 exports.profilePage = async (req, res, next) => {
   try {
-    const [user, _a] = await User.findById(req.user.user_id);
-    const [threads, _b] = await Thread.findUserThreads(req.user.user_id);
+    let user_id = req.user.user_id;
+
+    const [user, _a] = await User.findById(user_id);
+    const [threads, _b] = await Thread.findUserThreads(user_id);
+    const polls = await Poll.findUserPolls(user_id);
+
+    console.log({ threads, polls });
+
+    const postData = [...threads, ...polls];
+
+    postData.sort((el1, el2) => {
+      if (el1.created_at > el2.created_at) return -1;
+      if (el1.created_at < el2.created_at) return 1;
+      return 0;
+    });
 
     let profileData = {
-      threads,
+      postData,
       ...user[0],
     };
 

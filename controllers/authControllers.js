@@ -11,6 +11,8 @@ exports.getLoginPage = (req, res, next) => {
   let pageData = {
     pageTitle: "Login Page",
     isAuth: isLoggedIn,
+    error: req.flash("error"),
+    enterEmail: req.flash("enter_email")[0],
   };
 
   res.render("login", pageData);
@@ -26,6 +28,10 @@ exports.getRegisterPage = (req, res, next) => {
   let pageData = {
     pageTitle: "Register Page",
     isAuth: isLoggedIn,
+    error: req.flash("error"),
+    enterEmail: req.flash("enter_email"),
+    enterFName: req.flash("enter_fname"),
+    enterLName: req.flash("enter_lname"),
   };
 
   res.render("register", pageData);
@@ -40,6 +46,8 @@ exports.loginUser = async (req, res, next) => {
     const [user, _] = await db.execute(sql, [email]);
 
     if (!user || user.length === 0) {
+      req.flash("error", "Incorrect password or email");
+      req.flash("enter_email", email);
       return res.status(404).redirect("/auth/login");
     }
 
@@ -47,6 +55,8 @@ exports.loginUser = async (req, res, next) => {
     const isMatch = await User.checkPasswordMatch(user[0].password, password);
 
     if (!isMatch) {
+      req.flash("error", "Incorrect password or email");
+      req.flash("enter_email", email);
       return res.status(403).redirect("/auth/login");
     }
 
@@ -61,7 +71,27 @@ exports.loginUser = async (req, res, next) => {
 
 exports.registerUser = async (req, res, next) => {
   try {
-    let { firstName, lastName, email, password } = req.body;
+    let { firstName, lastName, email, password, confirmPassword } = req.body;
+
+    let [user, _a] = await User.isExistingUser(email);
+
+    console.log(user);
+
+    if (user[0].count > 0) {
+      req.flash("error", "User already registered with this email");
+      req.flash("enter_fname", firstName);
+      req.flash("enter_lname", lastName);
+      req.flash("enter_email", email);
+      return res.status(400).redirect("/auth/register");
+    }
+
+    if (confirmPassword !== password) {
+      req.flash("error", "Passwords don't match");
+      req.flash("enter_fname", firstName);
+      req.flash("enter_lname", lastName);
+      req.flash("enter_email", email);
+      return res.status(400).redirect("/auth/register");
+    }
 
     let hashedPassword = await User.hashPassword(password);
 
@@ -70,7 +100,7 @@ exports.registerUser = async (req, res, next) => {
     await newUser.save();
 
     // Redirect to home and create session for this user
-    req.session.isAuthenticated = true;
+    req.session.isLoggedIn = true;
     req.session.userId = newUser.userId;
     res.status(201).redirect("/feed");
   } catch (error) {

@@ -117,6 +117,79 @@ class Forum {
     return db.execute(sql, [forumId]);
   }
 
+  static async findAllForumPolls(forumId, userId) {
+    let sqlA = `
+    SELECT
+      p.poll_id AS 'poll_id', 
+      p.created_at,
+      p.title AS 'poll_title', 
+      f.title AS 'forum_title', 
+      f.image_url AS 'forum_image', 
+      f.forum_id AS 'forum_id',
+      pu.first_name AS 'creator_fname',
+      pu.last_name AS 'creator_lname'
+    FROM polls p
+    INNER JOIN forums f
+      ON 
+        f.forum_id = ?
+      AND
+        p.forum_id = f.forum_id
+    INNER JOIN users pu
+      ON
+        pu.user_id = p.user_id
+    ORDER BY p.created_at DESC`;
+
+    let [resA, _a] = await db.execute(sqlA, [forumId]);
+
+    for (let i = 0; i < resA.length; i++) {
+      let sqlB = `
+        SELECT
+          pq.content AS 'question',
+          pq.question_id,
+          pq.active AS 'question_status',
+          pa.content AS 'possible_answer',
+          pa.answer_id,
+          pa.active AS 'answer_status'
+        FROM polls p
+        INNER JOIN polls_questions pq
+          ON
+            p.poll_id = ? 
+          AND 
+            pq.poll_id = p.poll_id
+        INNER JOIN polls_answers pa
+          ON
+            pa.question_id = pq.question_id
+      `;
+
+      const [resB, _b] = await db.execute(sqlB, [resA[i].poll_id]);
+
+      let obj = {
+        question: resB[0].question,
+        question_id: resB[0].question_id,
+        question_status: resB[0].question_status,
+      };
+
+      resB.forEach((question, idx) => {
+        obj[`ans${idx + 1}`] = {
+          answer_id: question.answer_id,
+          answer: question.possible_answer,
+        };
+      });
+
+      let sqlC = `SELECT * FROM polls_votes WHERE question_id = ? AND user_id = ?;`;
+
+      const [resC, _c] = await db.execute(sqlC, [resB[0].question_id, userId]);
+
+      if (resC.length > 0) {
+        obj.userAnswer = resC[0].answer_id;
+      }
+
+      resA[i]["question"] = obj;
+    }
+
+    return resA;
+  }
+
   static followerCount(forumId) {
     let sql =
       "SELECT Count(*) as count FROM forums_followers WHERE forum_id = ?";

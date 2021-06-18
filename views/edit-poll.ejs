@@ -3,36 +3,36 @@
 <%- include('./partials/navbar.ejs', { isAuth, link: "" }) %>
 
 <div class="container">
-  <h1 class="single_thread_header page__title">Create New Poll</h1>
+  <h1 class="single_thread_header page__title">Edit Poll</h1>
 
   <form 
-    action="/polls" 
+    action="/polls/<%= pollData.poll_id %>?_method=PUT"
     method="POST"
   >
 
     <div class="form_group">
       <label for="forum">Forum</label>
-
       <select 
         name="forum" 
         id="forum" 
-        required>
+        value="<%= pollData.forum_id %>"
+      >
 
         <% forumsYouFollow.forEach((forum) => { %>
           <option value="<%= forum.forum_id %>"><%= forum.title %></option>
-        <% }) %> 
+        <% }) %>
+      
       </select>
-
     </div>
 
     <div class="form_group">
       <label for="title">Title</label>
-      
       <input 
         type="text" 
         name="title" 
         id="title" 
         placeholder="Poll title"
+        value="<%= pollData.title %>"
       >
     </div>
 
@@ -43,41 +43,24 @@
         id="question" 
         rows="5" 
         placeholder="Question Content"
-        required
-      ></textarea>
+      ><%= questionData.content %></textarea>
     </div>
 
-    <div class="form_group">
-      <label for="ans1">Answer One</label>
-      <input 
-        name="ans1" 
-        id="ans1" 
-        type="text"
-        required
-      >
-    </div>
+    <% answerData.forEach((answer, idx) => { %>
+      <div class="form_group">
 
-    <div class="form_group">
-      <label for="ans2">Answer Two</label>
-      <input 
-        name="ans2" 
-        id="ans2" 
-        type="text" 
-        required
-      >
-    </div>
+        <label for="ans<%= idx + 1%>">Answer One</label>
+        <input 
+          name="ans<%= idx + 1%>" 
+          id="ans<%= idx + 1%>" 
+          type="text"
+          value="<%= answer.content %>" 
+        >
 
-    <div class="form_group">
-      <label for="ans3">Answer Three</label>
-      <input 
-        name="ans3" 
-        id="ans3" 
-        type="text" 
-        required
-      >
-    </div>
+      </div>
+    <% }) %>
 
-    <button class="btn btn-primary">Create</button>
+    <button class="btn btn-primary">Edit</button>
   </form>
 </div>
 

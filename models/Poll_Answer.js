@@ -37,6 +37,21 @@ class PollAnswer {
 
     return db.execute(sqlA, [questionId]);
   }
+
+  static async findByQuestionIdAndUpdate(questionId, answerData) {
+    let sqlA = `SELECT * FROM polls_answers WHERE question_id = ?`;
+
+    const [resA, _a] = await db.execute(sqlA, [questionId]);
+
+    for (let i = 0; i < resA.length; i++) {
+      let newContent = answerData[i];
+      let answer_id = resA[i].answer_id;
+
+      let sqlB = "UPDATE polls_answers SET content = ? WHERE answer_id = ?";
+
+      await db.execute(sqlB, [newContent, answer_id]);
+    }
+  }
 }
 
 module.exports = PollAnswer;

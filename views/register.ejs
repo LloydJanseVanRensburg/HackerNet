@@ -5,6 +5,12 @@
 <form class="auth_form" action="/auth/register" method="POST">
   <h1>Register Page</h1>
 
+  <% if(error.length > 0) { %>
+    <% error.forEach((err) => { %>
+      <p class="error-message"><%= err %></p>
+    <% }) %>
+  <% } %>
+
   <div class="form_group">
     <label for="firstName">First Name</label>
     <input
@@ -13,6 +19,7 @@
       placeholder="Enter first name"
       name="firstName"
       id="firstName"
+      value="<%= enterFName %>"
     />
   </div>
 
@@ -24,6 +31,7 @@
       placeholder="Enter last name"
       name="lastName"
       id="lastName"
+      value="<%= enterLName %>"
     />
   </div>
 
@@ -35,6 +43,7 @@
       placeholder="Enter email address"
       name="email"
       id="email"
+      value="<%= enterEmail %>"
     />
   </div>
 
@@ -46,6 +55,7 @@
       placeholder="Enter password"
       name="password"
       id="password"
+      minlength="5"
     />
   </div>
 

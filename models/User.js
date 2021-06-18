@@ -31,6 +31,12 @@ class User {
     return db.execute("SELECT * FROM users WHERE user_id = ?", [id]);
   }
 
+  static isExistingUser(email) {
+    let sqlA = "SELECT COUNT(*) AS 'count' FROM users WHERE email = ?";
+
+    return db.execute(sqlA, [email]);
+  }
+
   static checkPasswordMatch(dbPassword, userPassword) {
     return bcrypt.compare(userPassword, dbPassword);
   }

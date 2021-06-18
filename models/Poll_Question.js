@@ -34,6 +34,16 @@ class PollQuestion {
 
     return db.execute(sqlA, [pollId]);
   }
+
+  static findByPollIdAndUpdate(pollId, questionData) {
+    let sqlA = `
+    UPDATE polls_questions
+    SET content = ?
+    WHERE poll_id = ?
+    `;
+
+    return db.execute(sqlA, [questionData, pollId]);
+  }
 }
 
 module.exports = PollQuestion;

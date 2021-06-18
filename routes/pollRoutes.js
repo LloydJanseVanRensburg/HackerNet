@@ -43,4 +43,34 @@ router.get(
   pollControllers.pollPage
 );
 
+// @route - /polls/:id
+// @desc - PUT update poll by id
+// @access - Private
+router.put(
+  "/:id",
+  protect,
+  authorize("Admin", "User"),
+  pollControllers.updatePoll
+);
+
+// @route - /polls/:id
+// @desc - DELETE remove poll by id from db
+// @access - Private
+router.delete(
+  "/:id",
+  protect,
+  authorize("Admin", "User"),
+  pollControllers.deletePoll
+);
+
+// @route - /polls/:id/edit
+// @desc - Get HTML page to view poll
+// @access - Private
+router.get(
+  "/:id/edit",
+  protect,
+  authorize("Admin", "User"),
+  pollControllers.updatePollPage
+);
+
 module.exports = router;

@@ -48,7 +48,14 @@ class Thread {
 
   static findThreadsComments(threadId) {
     let sqlA = `
-      SELECT c.title, c.body, c.created_at, c.user_id, u.first_name, u.last_name 
+      SELECT 
+        c.comment_id as 'comment_id', 
+        c.title, 
+        c.body, 
+        c.created_at, 
+        c.user_id, 
+        u.first_name, 
+        u.last_name 
       FROM comments c 
       INNER JOIN threads t 
       ON c.thread_id = ?  AND c.thread_id = t.thread_id

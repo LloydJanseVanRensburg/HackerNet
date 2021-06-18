@@ -27,3 +27,26 @@ exports.createNewComment = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.deleteComment = async (req, res, next) => {
+  try {
+    let user_id = req.user.user_id;
+    let comment_id = req.params.commentId;
+
+    let [comment, _a] = await Comment.findById(comment_id);
+
+    if (comment.length === 0) {
+      return res.status(404).redirect("/feed");
+    }
+
+    if (user_id !== comment[0].user_id) {
+      return res.status(403).redirect("/feed");
+    }
+
+    await Comment.findByIdAndDelete(comment_id);
+
+    res.status(204).redirect("/feed");
+  } catch (error) {
+    next(error);
+  }
+};

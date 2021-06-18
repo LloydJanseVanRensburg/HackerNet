@@ -21,15 +21,30 @@
 
   <p class="single_thread_text"><%= (new Date(poll.created_at)).toISOString().split("T")[0] %></p>
 
-  <p class="single_thread_text"><%= poll_question.content %></p>
+  <form
+    action="/polls/vote/<%= poll_question.question_id %>" 
+    method="POST"
+    class="poll_submit_form"
+  >
 
-  <form action="">
-    <% poll_answers.reverse().forEach((answer, idx) => { %>
-      <input type="radio" id="ans<%= idx + 1 %>" name="answer" value="<%= answer.answer_id %>">
-      <label for="ans<%= idx + 1 %>"><%= answer.content %></label>
-    <% }) %>
+    <p class="poll__question"><%= poll_question.content %></p>
 
-    <button type="submit">Submit</button>
+    <% poll_answers.forEach((answer, idx) => { %>
+      <div class="poll__answers">
+        <input 
+          type="radio" 
+          id="<%= answer.answer_id %>" 
+          name="answer" 
+          value="<%= answer.answer_id %>" 
+          required
+          <%= poll_vote && poll_vote.answer_id === answer.answer_id && 'checked'%>
+        >
+        <label for="<%= answer.answer_id %>"><%= answer.content %></label>
+      </div>
+    <% }); %>
+
+    <button type="submit" class="btn btn-secondary">Submit Answer</button>
+
   </form>
 
 </div>

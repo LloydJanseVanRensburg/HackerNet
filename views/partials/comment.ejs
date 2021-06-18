@@ -3,7 +3,10 @@
     <span><%= comment.title %></span>
 
     <% if(comment.user_id === userId) { %>
-      <form action="">
+      <form 
+        action="/comments/<%= comment.comment_id %>?_method=DELETE" 
+        method="POST"
+      >
         <button class="btn btn-danger">Delete</button>
       </form>
     <% } else { %> 

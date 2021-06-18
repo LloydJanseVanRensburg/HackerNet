@@ -117,6 +117,14 @@ body {
 /* ======================================================== */
 /*                       UTILITIES                          */
 /* ======================================================== */
+.error-message {
+  padding: 13px;
+  border: var(--error-color);
+  color: var(--light-one);
+  background: var(--error-color);
+  margin-bottom: 1rem;
+}
+
 .auth_form {
   width: 500px;
   margin: 0 auto;

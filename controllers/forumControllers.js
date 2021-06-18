@@ -26,11 +26,20 @@ exports.forumPage = async (req, res, next) => {
 
     const [forumData, _a] = await Forum.findById(forum_id);
     const [threads, _b] = await Forum.findAllForumThreads(forum_id);
-    const [followerCount, _c] = await Forum.followerCount(forum_id);
-    const [isForumFollower, _d] = await Forum.isForumFollower(
+    const polls = await Forum.findAllForumPolls(forum_id, user_id);
+    const [followerCount, _d] = await Forum.followerCount(forum_id);
+    const [isForumFollower, _e] = await Forum.isForumFollower(
       forum_id,
       user_id
     );
+
+    let forumPosts = [...polls, ...threads];
+
+    forumPosts.sort((el1, el2) => {
+      if (el1.created_at > el2.created_at) return -1;
+      if (el1.created_at < el2.created_at) return 1;
+      return 0;
+    });
 
     let pageData = {
       pageTitle: "Forum Page",
@@ -38,7 +47,7 @@ exports.forumPage = async (req, res, next) => {
       isAdmin: req.user.role === "Admin",
       forumData: forumData[0],
       followerCount: followerCount[0].count,
-      threads: threads,
+      forumPosts,
       forumFollower: isForumFollower[0].count,
     };
 

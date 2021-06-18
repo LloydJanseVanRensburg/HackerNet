@@ -42,11 +42,15 @@
     </div>
   </div>
 
-  <h4 class="profile__subtext">Total Threads (<%= threads.length %>)</h4>
+  <h4 class="profile__subtext">Total Posts (<%= forumPosts.length %>)</h4>
 
-  <% threads.forEach(data => { %>
-    <%- include('./partials/thread.ejs', { data }) %>
-  <% }) %>
+  <% forumPosts.forEach(data => { %>  
+    <% if(data.thread_id) { %>
+      <%- include('./partials/thread.ejs', { data } ) %>
+    <% } else if (data.poll_id) { %>
+      <%- include('./partials/poll.ejs', { data } ) %>
+    <% } %> 
+  <% }); %>
 
 </div>
 

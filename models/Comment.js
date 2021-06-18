@@ -26,6 +26,18 @@ class Comment {
 
     return db.execute(sqlA, placehoders);
   }
+
+  static findById(commentId) {
+    let sqlA = "SELECT * FROM comments WHERE comment_id = ?";
+
+    return db.execute(sqlA, [commentId]);
+  }
+
+  static findByIdAndDelete(commentId) {
+    let sqlA = "DELETE FROM comments WHERE comment_id = ?";
+
+    return db.execute(sqlA, [commentId]);
+  }
 }
 
 module.exports = Comment;

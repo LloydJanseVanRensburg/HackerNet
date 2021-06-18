@@ -23,4 +23,14 @@ router.post(
   commentControllers.createNewComment
 );
 
+// @route  - /comments/:commentId
+// @desc   - POST create new comment in database
+// @access - Private
+router.delete(
+  "/:commentId",
+  protect,
+  authorize("Admin", "User"),
+  commentControllers.deleteComment
+);
+
 module.exports = router;
