@@ -27,8 +27,6 @@ exports.createNewPoll = async (req, res, next) => {
     let { forum, title, question, ans1, ans2, ans3 } = req.body;
     let user_id = req.user.user_id;
 
-    console.log({ forum, title, question, ans1, ans2, ans3, user_id });
-
     // Create a poll
     const poll = new Poll(user_id, forum, title);
     await poll.save();
@@ -97,7 +95,6 @@ exports.pollPage = async (req, res, next) => {
 
 exports.createPollVote = async (req, res, next) => {
   try {
-    console.log("Hit");
     let { answer } = req.body;
     let question_id = req.params.questionId;
     let user_id = req.user.user_id;

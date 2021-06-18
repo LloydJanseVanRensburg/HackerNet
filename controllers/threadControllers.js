@@ -96,13 +96,9 @@ exports.editThread = async (req, res, next) => {
       return res.status(404).redirect("/feed");
     }
 
-    console.log(thread[0]);
-
     if (title) thread[0].title = title;
     if (body) thread[0].body = body;
     if (image_url) thread[0].image_url = image_url;
-
-    console.log(thread[0]);
 
     await Thread.findByIdAndUpdate(thread_id, thread[0]);
 

@@ -10,8 +10,6 @@ exports.profilePage = async (req, res, next) => {
     const [threads, _b] = await Thread.findUserThreads(user_id);
     const polls = await Poll.findUserPolls(user_id);
 
-    console.log({ threads, polls });
-
     const postData = [...threads, ...polls];
 
     postData.sort((el1, el2) => {

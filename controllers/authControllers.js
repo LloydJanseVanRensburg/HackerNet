@@ -75,8 +75,6 @@ exports.registerUser = async (req, res, next) => {
 
     let [user, _a] = await User.isExistingUser(email);
 
-    console.log(user);
-
     if (user[0].count > 0) {
       req.flash("error", "User already registered with this email");
       req.flash("enter_fname", firstName);
