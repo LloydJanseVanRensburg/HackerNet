@@ -1,9 +1,7 @@
 const db = require("../config/db");
-const { v4: uuidv4 } = require("uuid");
 
 class PollAnswer {
   constructor(questionId, pollId, active, content) {
-    this.answer_id = uuidv4();
     this.question_id = questionId;
     this.poll_id = pollId;
     this.active = active;
@@ -12,9 +10,13 @@ class PollAnswer {
 
   save() {
     let sqlA = `
-    INSERT INTO polls_answers(answer_id, question_id, poll_id, active, content)
+    INSERT INTO polls_answers(
+      question_id, 
+      poll_id, 
+      active, 
+      content
+    )
     VALUES (
-      ?,
       ?,
       ?,
       ?,
@@ -22,7 +24,6 @@ class PollAnswer {
     );`;
 
     let placeholders = [
-      this.answer_id,
       this.question_id,
       this.poll_id,
       this.active,
@@ -33,13 +34,21 @@ class PollAnswer {
   }
 
   static findByQuestionId(questionId) {
-    let sqlA = "SELECT * FROM polls_answers WHERE question_id = ?";
+    let sqlA = `
+      SELECT * 
+      FROM polls_answers 
+      WHERE question_id = ?`;
 
-    return db.execute(sqlA, [questionId]);
+    let placeholders = [questionId];
+
+    return db.execute(sqlA, placeholders);
   }
 
   static async findByQuestionIdAndUpdate(questionId, answerData) {
-    let sqlA = `SELECT * FROM polls_answers WHERE question_id = ?`;
+    let sqlA = `
+      SELECT * 
+      FROM polls_answers 
+      WHERE question_id = ?`;
 
     const [resA, _a] = await db.execute(sqlA, [questionId]);
 
@@ -47,7 +56,11 @@ class PollAnswer {
       let newContent = answerData[i];
       let answer_id = resA[i].answer_id;
 
-      let sqlB = "UPDATE polls_answers SET content = ? WHERE answer_id = ?";
+      let sqlB = `
+        UPDATE polls_answers 
+        SET 
+          content = ? 
+        WHERE answer_id = ?`;
 
       await db.execute(sqlB, [newContent, answer_id]);
     }

@@ -30,6 +30,7 @@ app.use(
 app.use(flash());
 
 // Requests Routing
+app.get("/", (req, res) => res.status(302).redirect("/feed"));
 app.use("/feed", require("./routes/feedRoutes"));
 app.use("/auth", require("./routes/authRoutes"));
 app.use("/forums", require("./routes/forumRoutes"));
@@ -45,3 +46,7 @@ app.use(errorHandler);
 // Server Listening on Computer PORT
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on PORT: ${PORT}`));
+
+process.on("unhandledRejection", (err) => {
+  console.log(err);
+});

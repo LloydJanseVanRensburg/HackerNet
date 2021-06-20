@@ -1,40 +1,59 @@
 const db = require("../config/db");
 const bcrypt = require("bcryptjs");
-const { v4: uuidv4 } = require("uuid");
 
 class User {
   constructor(firstName, lastName, email, password) {
-    this.userId = uuidv4();
     this.firstName = firstName;
     this.lastName = lastName;
     this.email = email;
     this.password = password;
-    this.createdAt = new Date(Date.now());
   }
 
   save() {
-    let sql = `INSERT INTO users(user_id, first_name, last_name, email, created_at, password, role) VALUES (?,?,?,?,?,?,?);`;
+    let sql = `
+      INSERT INTO users(
+        first_name, 
+        last_name, 
+        email, 
+        password
+      ) 
+      VALUES (
+        ?,
+        ?,
+        ?,
+        ?
+      );`;
+
     let placeholders = [
-      this.userId,
       this.firstName,
       this.lastName,
       this.email,
-      this.createdAt,
       this.password,
-      "User",
     ];
 
     return db.execute(sql, placeholders);
   }
 
-  static findById(id) {
-    return db.execute("SELECT * FROM users WHERE user_id = ?", [id]);
+  static findById(userId) {
+    let sqlA = `
+      SELECT * 
+      FROM users 
+      WHERE user_id = ?;`;
+
+    let placeholders = [userId];
+
+    return db.execute(sqlA, placeholders);
   }
 
   static isExistingUser(email) {
-    let sqlA = "SELECT COUNT(*) AS 'count' FROM users WHERE email = ?";
+    let sqlA = `
+      SELECT * 
+      FROM users 
+      WHERE email = ?`;
 
-    return db.execute(sqlA, [email]);
+    let placeholders = [email];
+
+    return db.execute(sqlA, placeholders);
   }
 
   static checkPasswordMatch(dbPassword, userPassword) {

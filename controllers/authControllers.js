@@ -1,4 +1,4 @@
-const db = require("../config/db");
+const catchAsync = require("../middleware/catchAsync");
 const User = require("../models/User");
 
 exports.getLoginPage = (req, res, next) => {
@@ -37,74 +37,65 @@ exports.getRegisterPage = (req, res, next) => {
   res.render("register", pageData);
 };
 
-exports.loginUser = async (req, res, next) => {
-  try {
-    let { email, password } = req.body;
+exports.loginUser = catchAsync(async (req, res, next) => {
+  let { email, password } = req.body;
 
-    // Check if user exists
-    let sql = "SELECT * FROM users WHERE email = ?;";
-    const [user, _] = await db.execute(sql, [email]);
+  // Check if user exists
+  const [user, _a] = await User.isExistingUser(email);
 
-    if (!user || user.length === 0) {
-      req.flash("error", "Incorrect password or email");
-      req.flash("enter_email", email);
-      return res.status(404).redirect("/auth/login");
-    }
-
-    // Check if password match
-    const isMatch = await User.checkPasswordMatch(user[0].password, password);
-
-    if (!isMatch) {
-      req.flash("error", "Incorrect password or email");
-      req.flash("enter_email", email);
-      return res.status(403).redirect("/auth/login");
-    }
-
-    // Login user by redirecting to home screen and creating session
-    req.session.isLoggedIn = true;
-    req.session.userId = user[0].user_id;
-    res.status(200).redirect("/feed");
-  } catch (error) {
-    next(error);
+  if (user.length === 0) {
+    req.flash("error", "Incorrect password or email");
+    req.flash("enter_email", email);
+    return res.status(404).redirect("/auth/login");
   }
-};
 
-exports.registerUser = async (req, res, next) => {
-  try {
-    let { firstName, lastName, email, password, confirmPassword } = req.body;
+  // Check if password match
+  const isMatch = await User.checkPasswordMatch(user[0].password, password);
 
-    let [user, _a] = await User.isExistingUser(email);
-
-    if (user[0].count > 0) {
-      req.flash("error", "User already registered with this email");
-      req.flash("enter_fname", firstName);
-      req.flash("enter_lname", lastName);
-      req.flash("enter_email", email);
-      return res.status(400).redirect("/auth/register");
-    }
-
-    if (confirmPassword !== password) {
-      req.flash("error", "Passwords don't match");
-      req.flash("enter_fname", firstName);
-      req.flash("enter_lname", lastName);
-      req.flash("enter_email", email);
-      return res.status(400).redirect("/auth/register");
-    }
-
-    let hashedPassword = await User.hashPassword(password);
-
-    let newUser = new User(firstName, lastName, email, hashedPassword);
-
-    await newUser.save();
-
-    // Redirect to home and create session for this user
-    req.session.isLoggedIn = true;
-    req.session.userId = newUser.userId;
-    res.status(201).redirect("/feed");
-  } catch (error) {
-    next(error);
+  if (!isMatch) {
+    req.flash("error", "Incorrect password or email");
+    req.flash("enter_email", email);
+    return res.status(403).redirect("/auth/login");
   }
-};
+
+  // Login user by redirecting to home screen and creating session
+  req.session.isLoggedIn = true;
+  req.session.userId = user[0].user_id;
+  res.status(200).redirect("/feed");
+});
+
+exports.registerUser = catchAsync(async (req, res, next) => {
+  let { firstName, lastName, email, password, confirmPassword } = req.body;
+
+  let [user, _a] = await User.isExistingUser(email);
+
+  if (user.length !== 0) {
+    req.flash("error", "User already registered with this email");
+    req.flash("enter_fname", firstName);
+    req.flash("enter_lname", lastName);
+    req.flash("enter_email", email);
+    return res.status(400).redirect("/auth/register");
+  }
+
+  if (confirmPassword !== password) {
+    req.flash("error", "Passwords don't match");
+    req.flash("enter_fname", firstName);
+    req.flash("enter_lname", lastName);
+    req.flash("enter_email", email);
+    return res.status(400).redirect("/auth/register");
+  }
+
+  let hashedPassword = await User.hashPassword(password);
+
+  let newUser = new User(firstName, lastName, email, hashedPassword);
+
+  const [result, _b] = await newUser.save();
+
+  // Redirect to home and create session for this user
+  req.session.isLoggedIn = true;
+  req.session.userId = result.insertId;
+  res.status(201).redirect("/feed");
+});
 
 exports.logoutUser = (req, res, next) => {
   req.session.destroy(() => {

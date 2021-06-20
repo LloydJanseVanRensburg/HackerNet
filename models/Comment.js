@@ -1,5 +1,4 @@
 const db = require("../config/db");
-const { v4: uuidv4 } = require("uuid");
 
 class Comment {
   constructor(title, body, userId, threadId) {
@@ -7,34 +6,41 @@ class Comment {
     this.body = body;
     this.user_id = userId;
     this.thread_id = threadId;
-    this.comment_id = uuidv4();
-    this.created_at = new Date(Date.now());
   }
 
   save() {
-    let sqlA =
-      "INSERT INTO comments(comment_id, thread_id, user_id, title, body, created_at) VALUES(?, ?, ?, ?, ?, ?);";
+    let sqlA = `
+      INSERT INTO comments(
+        thread_id, 
+        user_id, 
+        title, 
+        body
+      ) 
+      VALUES(
+        ?, 
+        ?, 
+        ?, 
+        ?
+      );`;
 
-    let placehoders = [
-      this.comment_id,
-      this.thread_id,
-      this.user_id,
-      this.title,
-      this.body,
-      this.created_at,
-    ];
+    let placehoders = [this.thread_id, this.user_id, this.title, this.body];
 
     return db.execute(sqlA, placehoders);
   }
 
   static findById(commentId) {
-    let sqlA = "SELECT * FROM comments WHERE comment_id = ?";
+    let sqlA = `
+      SELECT * 
+      FROM comments 
+      WHERE comment_id = ?`;
 
     return db.execute(sqlA, [commentId]);
   }
 
   static findByIdAndDelete(commentId) {
-    let sqlA = "DELETE FROM comments WHERE comment_id = ?";
+    let sqlA = `
+      DELETE FROM comments
+      WHERE comment_id = ?`;
 
     return db.execute(sqlA, [commentId]);
   }

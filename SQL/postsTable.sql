@@ -1,9 +1,0 @@
--- CREATE TABLE Posts (
---   post_id VARCHAR(255) NOT NULL,
---   title VARCHAR(100),
---   body TEXT,
---   created_at DATE,
---   user_id VARCHAR(255),
---   PRIMARY KEY (post_id),
---   FOREIGN KEY (user_id) REFERENCES Users(user_id)
--- );

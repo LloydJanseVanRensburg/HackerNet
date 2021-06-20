@@ -78,11 +78,12 @@ class Feed {
         FROM polls p
         INNER JOIN polls_questions pq
           ON
-            p.poll_id = ? AND pq.poll_id = p.poll_id
+            p.poll_id = ? 
+              AND 
+            pq.poll_id = p.poll_id
         INNER JOIN polls_answers pa
           ON
-            pa.question_id = pq.question_id
-      `;
+            pa.question_id = pq.question_id`;
 
       const [resB, _b] = await db.execute(sqlB, [resA[i].poll_id]);
 

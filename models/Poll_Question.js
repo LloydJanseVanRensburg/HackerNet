@@ -1,9 +1,7 @@
 const db = require("../config/db");
-const { v4: uuidv4 } = require("uuid");
 
 class PollQuestion {
   constructor(pollId, active, content) {
-    this.question_id = uuidv4();
     this.poll_id = pollId;
     this.active = active;
     this.content = content;
@@ -11,38 +9,43 @@ class PollQuestion {
 
   save() {
     let sqlA = `
-    INSERT INTO polls_questions(question_id, poll_id, active, content)
-    VALUES (
-      ?,
-      ?,
-      ?,
-      ?
-    );`;
+      INSERT INTO polls_questions(
+        poll_id, 
+        active, 
+        content
+      )
+      VALUES (
+        ?,
+        ?,
+        ?
+      );`;
 
-    let placeholders = [
-      this.question_id,
-      this.poll_id,
-      this.active,
-      this.content,
-    ];
+    let placeholders = [this.poll_id, this.active, this.content];
 
     return db.execute(sqlA, placeholders);
   }
 
   static findByPollId(pollId) {
-    let sqlA = "SELECT * FROM polls_questions WHERE poll_id = ?";
+    let sqlA = `
+      SELECT * 
+      FROM polls_questions 
+      WHERE poll_id = ?`;
 
-    return db.execute(sqlA, [pollId]);
+    let placeholders = [pollId];
+
+    return db.execute(sqlA, placeholders);
   }
 
   static findByPollIdAndUpdate(pollId, questionData) {
     let sqlA = `
-    UPDATE polls_questions
-    SET content = ?
-    WHERE poll_id = ?
-    `;
+      UPDATE polls_questions
+      SET 
+        content = ?
+      WHERE poll_id = ?`;
 
-    return db.execute(sqlA, [questionData, pollId]);
+    let placeholders = [questionData, pollId];
+
+    return db.execute(sqlA, placeholders);
   }
 }
 

@@ -1,60 +1,45 @@
 const db = require("../config/db");
-const { v4: uuidv4 } = require("uuid");
 
 class Forum {
   constructor(title, description, image_url) {
-    this.forum_id = uuidv4();
-    this.created_at = new Date(Date.now());
     this.title = title;
     this.description = description;
     this.image_url = image_url;
   }
 
   save() {
-    let sql =
-      "INSERT INTO forums(forum_id, description, title, created_at, image_url) VALUES(?,?,?,?,?);";
+    let sql = `
+    INSERT INTO forums(
+      description, 
+      title, 
+      image_url
+    ) 
+    VALUES(
+      ?,
+      ?,
+      ?
+    );`;
 
-    return db.execute(sql, [
-      this.forum_id,
-      this.description,
-      this.title,
-      this.created_at,
-      this.image_url,
-    ]);
+    let placeholders = [this.description, this.title, this.image_url];
+
+    return db.execute(sql, placeholders);
   }
 
   static findById(forumId) {
-    let sql = "SELECT * FROM forums WHERE forum_id = ?";
+    let sql = `
+      SELECT * 
+      FROM forums 
+      WHERE forum_id = ?`;
 
-    return db.execute(sql, [forumId]);
+    let placeholders = [forumId];
+    return db.execute(sql, placeholders);
   }
 
   static async findByIdAndUpdate(forumId, forumData) {
-    try {
-      let sqlA = "SELECT Count(*) FROM forums WHERE forum_id = ?";
-
-      const [resA, _a] = await db.execute(sqlA, [forumId]);
-
-      if (resA.length === 0) {
-        return next(new Error(`No forum with id: ${forumId} was found`));
-      }
-
-      let sqlB =
-        "UPDATE forums SET description = ?, title = ?, image_url = ? WHERE forum_id = ?";
-
-      return db.execute(sqlB, [
-        forumData.description,
-        forumData.title,
-        forumData.image_url,
-        forumId,
-      ]);
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  static async deleteForumById(forumId) {
-    let sqlA = "SELECT Count(*) FROM forums WHERE forum_id = ?";
+    let sqlA = `
+      SELECT * 
+      FROM forums 
+      WHERE forum_id = ?`;
 
     const [resA, _a] = await db.execute(sqlA, [forumId]);
 
@@ -62,32 +47,87 @@ class Forum {
       return next(new Error(`No forum with id: ${forumId} was found`));
     }
 
-    let sqlB = "DELETE FROM forums WHERE forum_id = ?";
+    let sqlB = `
+      UPDATE forums 
+      SET description = ?, 
+        title = ?, 
+        image_url = ? 
+      WHERE forum_id = ?`;
 
-    return db.execute(sqlB, [forumId]);
+    let placeholders = [
+      forumData.description,
+      forumData.title,
+      forumData.image_url,
+      forumId,
+    ];
+
+    return db.execute(sqlB, placeholders);
+  }
+
+  static async deleteForumById(forumId) {
+    let sqlA = `
+      SELECT * 
+      FROM forums 
+      WHERE forum_id = ?`;
+
+    const [resA, _a] = await db.execute(sqlA, [forumId]);
+
+    if (resA.length === 0) {
+      return next(new Error(`No forum with id: ${forumId} was found`));
+    }
+
+    let sqlB = `
+      DELETE 
+      FROM forums 
+      WHERE forum_id = ?`;
+
+    let placeholders = [forumId];
+
+    return db.execute(sqlB, placeholders);
   }
 
   static isForumFollower(forumId, userId) {
-    let sqlA =
-      "SELECT Count(*) as 'count' FROM forums_followers WHERE forum_id = ? AND user_id = ?";
+    let sqlA = `
+      SELECT Count(*) as 'count' 
+      FROM forums_followers 
+      WHERE 
+        forum_id = ? 
+          AND 
+        user_id = ?`;
 
-    return db.execute(sqlA, [forumId, userId]);
+    let placeholders = [forumId, userId];
+
+    return db.execute(sqlA, placeholders);
   }
 
   static followForum(forumId, userId) {
-    let sqlA =
-      "INSERT INTO forums_followers(forum_id, user_id, created_at) VALUES(?, ?, ?)";
+    let sqlA = `
+      INSERT INTO forums_followers(
+        forum_id, 
+        user_id
+      ) 
+      VALUES(
+        ?, 
+        ? 
+      )`;
 
-    let createdAt = new Date(Date.now());
+    let placeholders = [forumId, userId];
 
-    return db.execute(sqlA, [forumId, userId, createdAt]);
+    return db.execute(sqlA, placeholders);
   }
 
   static unfollowForum(forumId, userId) {
-    let sqlA =
-      "DELETE FROM forums_followers WHERE forum_id = ? AND user_id = ?";
+    let sqlA = `
+      DELETE 
+      FROM forums_followers 
+      WHERE 
+        forum_id = ? 
+          AND 
+        user_id = ?`;
 
-    return db.execute(sqlA, [forumId, userId]);
+    let placeholders = [forumId, userId];
+
+    return db.execute(sqlA, placeholders);
   }
 
   static findAllForumThreads(forumId) {
@@ -114,30 +154,32 @@ class Forum {
           AND 
             f.forum_id = ?`;
 
-    return db.execute(sql, [forumId]);
+    let placeholders = [forumId];
+
+    return db.execute(sql, placeholders);
   }
 
   static async findAllForumPolls(forumId, userId) {
     let sqlA = `
-    SELECT
-      p.poll_id AS 'poll_id', 
-      p.created_at,
-      p.title AS 'poll_title', 
-      f.title AS 'forum_title', 
-      f.image_url AS 'forum_image', 
-      f.forum_id AS 'forum_id',
-      pu.first_name AS 'creator_fname',
-      pu.last_name AS 'creator_lname'
-    FROM polls p
-    INNER JOIN forums f
-      ON 
-        f.forum_id = ?
-      AND
-        p.forum_id = f.forum_id
-    INNER JOIN users pu
-      ON
-        pu.user_id = p.user_id
-    ORDER BY p.created_at DESC`;
+      SELECT
+        p.poll_id AS 'poll_id', 
+        p.created_at,
+        p.title AS 'poll_title', 
+        f.title AS 'forum_title', 
+        f.image_url AS 'forum_image', 
+        f.forum_id AS 'forum_id',
+        pu.first_name AS 'creator_fname',
+        pu.last_name AS 'creator_lname'
+      FROM polls p
+      INNER JOIN forums f
+        ON 
+          f.forum_id = ?
+        AND
+          p.forum_id = f.forum_id
+      INNER JOIN users pu
+        ON
+          pu.user_id = p.user_id
+      ORDER BY p.created_at DESC`;
 
     let [resA, _a] = await db.execute(sqlA, [forumId]);
 
@@ -158,8 +200,7 @@ class Forum {
             pq.poll_id = p.poll_id
         INNER JOIN polls_answers pa
           ON
-            pa.question_id = pq.question_id
-      `;
+            pa.question_id = pq.question_id;`;
 
       const [resB, _b] = await db.execute(sqlB, [resA[i].poll_id]);
 
@@ -176,7 +217,13 @@ class Forum {
         };
       });
 
-      let sqlC = `SELECT * FROM polls_votes WHERE question_id = ? AND user_id = ?;`;
+      let sqlC = `
+        SELECT * 
+        FROM polls_votes 
+        WHERE 
+          question_id = ? 
+            AND 
+          user_id = ?;`;
 
       const [resC, _c] = await db.execute(sqlC, [resB[0].question_id, userId]);
 
@@ -191,32 +238,44 @@ class Forum {
   }
 
   static followerCount(forumId) {
-    let sql =
-      "SELECT Count(*) as count FROM forums_followers WHERE forum_id = ?";
+    let sql = `
+      SELECT Count(*) as count 
+      FROM forums_followers 
+      WHERE forum_id = ?`;
 
-    return db.execute(sql, [forumId]);
+    let placeholders = [forumId];
+
+    return db.execute(sql, placeholders);
   }
 
   static findAllForums() {
-    let sql = "SELECT f.forum_id, f.title, f.image_url FROM forums f;";
+    let sql = `
+      SELECT * 
+      FROM forums;`;
 
     return db.execute(sql);
   }
 
   static async findMyJoinedForums(userId) {
-    // Find all the forum titles and forum image_urls that user_id is following
-
-    let followForumIDs =
-      "SELECT forum_id FROM forums_followers ff WHERE ff.user_id = ?;";
+    let followForumIDs = `
+      SELECT forum_id 
+      FROM forums_followers 
+      WHERE user_id = ?;`;
 
     const [forumIDS, _] = await db.execute(followForumIDs, [userId]);
 
     let myFollowingForumsData = [];
 
     for (let i = 0; i < forumIDS.length; i++) {
-      let sql = `SELECT f.forum_id, f.title, f.image_url FROM forums f WHERE f.forum_id = '${forumIDS[i].forum_id}'`;
+      let sql = `
+        SELECT 
+          forum_id, 
+          title, 
+          image_url 
+        FROM forums
+        WHERE forum_id = ?`;
 
-      const [forum, _] = await db.execute(sql);
+      const [forum, _] = await db.execute(sql, [forumIDS[i].forum_id]);
 
       let forumData = {
         forum_id: forum[0].forum_id,
